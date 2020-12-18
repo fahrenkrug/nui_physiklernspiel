@@ -1,34 +1,31 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import Level1 from "@/views/Level1";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
     component: Home
   },
   {
-    path: "/level-1",
-    component: Level1
-    // component: () =>
-    //   import(/* webpackChunkName: "level1" */ "../views/Level1.vue")
+    path: "/levels/1",
+    component: () =>
+      import(/* webpackChunkName: "level1" */ "../views/Level1.vue")
   },
   {
-    path: "/level-2",
+    path: "/levels/2",
     component: () =>
       import(/* webpackChunkName: "level2" */ "../views/Level2.vue")
   },
   {
-    path: "/level-3",
+    path: "/levels/3",
     component: () =>
       import(/* webpackChunkName: "level3" */ "../views/Level3.vue")
   },
   {
-    path: "/level-4",
+    path: "/levels/4",
     component: () =>
       import(/* webpackChunkName: "level4" */ "../views/Level4.vue")
   }

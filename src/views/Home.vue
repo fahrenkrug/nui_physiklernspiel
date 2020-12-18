@@ -3,7 +3,7 @@
     <router-link
       v-for="level in levels"
       :key="level.number"
-      :to="`/levels-${level.number}`"
+      :to="`/levels/${level.number}`"
       >{{ level.name }}<br />
     </router-link>
   </div>
