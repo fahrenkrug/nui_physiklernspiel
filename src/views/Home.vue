@@ -1,18 +1,38 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <router-link
+      v-for="level in levels"
+      :key="level.number"
+      :to="`/levels-${level.number}`"
+      >{{ level.name }}<br />
+    </router-link>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
 export default {
   name: "Home",
-  components: {
-    HelloWorld
+  computed: {
+    levels() {
+      return [
+        {
+          number: 1,
+          name: "Tolles Physiklevel"
+        },
+        {
+          number: 2,
+          name: "Der Apfel fällt"
+        },
+        {
+          number: 3,
+          name: "Das Katapult"
+        },
+        {
+          number: 4,
+          name: "Noch ein tolles Physiklevel"
+        }
+      ];
+    }
   }
 };
 </script>
