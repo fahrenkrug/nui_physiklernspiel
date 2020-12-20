@@ -1,37 +1,34 @@
 <template>
-  <div class="home">
-    <router-link
-      v-for="level in levels"
-      :key="level.number"
-      :to="`/levels/${level.number}`"
-      >{{ level.name }}<br />
-    </router-link>
-  </div>
+  <v-container>
+    <v-row v-for="rowIndex in levels.length / levelsPerRow" :key="rowIndex">
+      <v-col
+        v-for="colIndex in levelsPerRow"
+        :key="`row-${rowIndex}-col-${colIndex}`"
+        cols="12"
+        sm="6"
+      >
+        <level-card :level="getLevel(rowIndex, colIndex)" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import LevelCard from "@/components/LevelCard";
+
 export default {
   name: "Home",
+  components: { LevelCard },
   computed: {
-    levels() {
-      return [
-        {
-          number: 1,
-          name: "Tolles Physiklevel"
-        },
-        {
-          number: 2,
-          name: "Der Apfel fällt"
-        },
-        {
-          number: 3,
-          name: "Das Katapult"
-        },
-        {
-          number: 4,
-          name: "Noch ein tolles Physiklevel"
-        }
-      ];
+    levelsPerRow() {
+      return 2;
+    },
+    ...mapState("level", ["levels"])
+  },
+  methods: {
+    getLevel(rowIndex, colIndex) {
+      return this.levels[(rowIndex - 1) * 2 + colIndex - 1];
     }
   }
 };
