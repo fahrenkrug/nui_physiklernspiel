@@ -14,6 +14,9 @@ export default {
   name: "App",
   components: {
     AppBar
+  },
+  created() {
+    this.$store.dispatch("level/onLoad");
   }
 };
 </script>

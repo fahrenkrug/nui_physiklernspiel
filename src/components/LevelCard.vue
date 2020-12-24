@@ -10,8 +10,13 @@
     </v-card-subtitle>
 
     <v-card-actions>
-      <v-btn color="orange lighten-2" text :to="`/levels/${level.number}`">
-        Explore
+      <v-btn
+        color="orange lighten-2"
+        text
+        :to="`/levels/${level.number}`"
+        :disabled="!level.canBeAccessed"
+      >
+        {{ level.canBeAccessed ? "Anschauen" : "Noch nicht freigespielt" }}
       </v-btn>
     </v-card-actions>
   </v-card>
