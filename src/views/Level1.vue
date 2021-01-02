@@ -1,7 +1,13 @@
 <template>
   <v-container>
-    <div id="matterElement"></div>
-    <v-slider max="2000" min="1" v-model="mass" />
+    <level-navigation />
+    <div id="matterJsElement"></div>
+    <v-row>
+      <v-col cols="4">Masse: {{ mass }}</v-col>
+      <v-col>
+        <v-slider :max="maxMass" :min="minMass" v-model="mass" class="slider" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -20,9 +26,17 @@ import {
   Events
 } from "matter-js";
 import SweetAlert from "sweetalert2";
+import LevelNavigation from "@/components/LevelNavigation";
+
+const render = {
+  fillStyle: "#000",
+  strokeStyle: "#fff",
+  lineWidth: 3
+};
 
 export default {
   name: "Level1",
+  components: { LevelNavigation },
   data() {
     return {
       engine: null,
@@ -31,13 +45,20 @@ export default {
       target: null,
       jumpingBox: null,
       circle: null,
+      circleCategory: 0x0002,
       collisionReject: null,
-      mass: 1
+      mass: 0.1
     };
   },
   computed: {
     world() {
       return this.engine.world;
+    },
+    maxMass() {
+      return 4000;
+    },
+    minMass() {
+      return 1;
     }
   },
   mounted() {
@@ -57,10 +78,15 @@ export default {
       this.engine = Engine.create();
       this.render = Render.create({
         engine: this.engine,
-        element: document.getElementById("matterElement"),
+        element: document.getElementById("matterJsElement"),
         showAngleIndicator: true,
         showCollisions: true,
-        showVelocity: true
+        showVelocity: true,
+        options: {
+          width: window.screen.availWidth - 20,
+          height: window.screen.availHeight - 310,
+          wireframes: false
+        }
       });
       Render.run(this.render);
       this.runner = Runner.create();
@@ -69,23 +95,34 @@ export default {
     setupWorld() {
       const group = Body.nextGroup(true);
 
-      this.jumpingBox = Bodies.rectangle(255, 355, 30, 30);
+      this.jumpingBox = Bodies.rectangle(255, 355, 30, 30, { render });
 
       const catapult = Bodies.rectangle(400, 520, 320, 20, {
-        collisionFilter: { group }
+        collisionFilter: { group },
+        render
       });
 
-      this.circle = Bodies.circle(700, 500, 20, { mass: 200 });
-      this.target = Bodies.rectangle(400, 200, 80, 14, { isStatic: true });
+      this.circle = Bodies.circle(700, 500, 40, {
+        mass: 200,
+        render,
+        collisionFilter: {
+          category: this.circleCategory
+        }
+      });
+      this.target = Bodies.rectangle(440, 200, 40, 14, {
+        isStatic: true,
+        render
+      });
       World.add(this.world, [
         this.jumpingBox,
         catapult,
         this.target,
-        Bodies.rectangle(400, 600, 800, 50.5, { isStatic: true }),
-        Bodies.rectangle(250, 555, 20, 50, { isStatic: true }),
+        Bodies.rectangle(400, 600, 800, 50.5, { isStatic: true, render }),
+        Bodies.rectangle(250, 555, 20, 50, { isStatic: true, render }),
         Bodies.rectangle(400, 535, 20, 80, {
           isStatic: true,
-          collisionFilter: { group: group }
+          collisionFilter: { group: group },
+          render
         }),
         this.circle,
         Constraint.create({
@@ -105,9 +142,11 @@ export default {
           render: {
             visible: false
           }
+        },
+        collisionFilter: {
+          mask: this.circleCategory
         }
       });
-
       World.add(this.world, mouseConstraint);
       this.render.mouse = mouse;
       Render.lookAt(this.render, {
