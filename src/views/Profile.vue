@@ -39,24 +39,11 @@
               <h5 class="text-center">Bestzeiten:</h5>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="12">
-              <p class="text-center">Level 1: 2 Sekunden</p>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <p class="text-center">Level 2: 20 Sekunden</p>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <p class="text-center">Level 3: 21 Sekunden</p>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <p class="text-center">Level 4: 17 Sekunden</p>
+          <v-row v-for="(time, index) in times" :key="time">
+            <v-col cols="12" class="py-0">
+              <p :class="`text-center ${index !== 3 ? 'my-0' : ''}`">
+                Level {{ index + 1 }}: {{ time }} Sekunden
+              </p>
             </v-col>
           </v-row>
         </v-card>
@@ -67,7 +54,12 @@
 
 <script>
 export default {
-  name: "Profile"
+  name: "Profile",
+  computed: {
+    times() {
+      return [2, 20, 21, 17];
+    }
+  }
 };
 </script>
 
