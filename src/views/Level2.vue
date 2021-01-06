@@ -17,10 +17,8 @@ import {
   Mouse,
   World,
   Bodies,
-  Body,
-  Events
+  Body
 } from "matter-js";
-import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
 
 const render = {
@@ -168,55 +166,8 @@ export default {
       });
     },
     listenForCollisionEvents() {
-      Events.on(this.engine, "collisionStart", async ({ pairs }) => {
-        const goalPair = pairs.find(this.isGoalPair);
-        if (!goalPair) {
-          return;
-        }
-        try {
-          await this.waitIfCollisionStays();
-          await this.onGoalCollision();
-        } catch (e) {
-          console.log(e);
-        }
-      });
-    },
-    isGoalPair(pair) {
-      return (
-        (pair.bodyA === this.jumpingBox && pair.bodyB === this.target) ||
-        (pair.bodyB === this.jumpingBox && pair.bodyA === this.target)
-      );
-    },
-    waitIfCollisionStays() {
-      return new Promise((resolve, reject) => {
-        this.collisionReject = reject;
-        setTimeout(() => {
-          Events.off(this.engine, "collisionEnd", this.onCollisionEnd);
-          resolve();
-        }, 2000);
-        Events.on(this.engine, "collisionEnd", this.onCollisionEnd);
-      });
-    },
-    onCollisionEnd({ pairs }) {
-      const goalPair = pairs.find(this.isGoalPair);
-      if (!goalPair) {
-        return;
-      }
-      this.collisionReject(new Error("Collision was just temporary."));
-    },
-    async onGoalCollision() {
-      await this.$store.dispatch("level/didAchieveLevel", { number: 1 });
-      const { isConfirmed } = await SweetAlert.fire({
-        title: "Sehr gut!",
-        icon: "success",
-        confirmButtonText: "Zum nächsten Level",
-        cancelButtonText: "Abbrechen",
-        showCancelButton: true
-      });
-      if (isConfirmed) {
-        await this.$router.push("/levels/2");
-      }
-    }
+      
+    } 
   }
 };
 </script>
