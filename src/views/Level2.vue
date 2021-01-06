@@ -20,13 +20,6 @@ import {
   Body
 } from "matter-js";
 import LevelNavigation from "@/components/LevelNavigation";
-
-const render = {
-  fillStyle: "#000",
-  strokeStyle: "#fff",
-  lineWidth: 3
-};
-
 export default {
   name: "Level2",
   components: { LevelNavigation },
@@ -38,7 +31,7 @@ export default {
       target: null,
       jumpingBox: null,
       circle: null,
-      circleCategory: 0x0002,
+      rectangleCategory: 0x0002,
       collisionReject: null
     };
   },
@@ -58,7 +51,7 @@ export default {
       this.setupEngine();
       this.setupWorld();
       this.setupMouse();
-      this.listenForCollisionEvents();
+      //this.listenForCollisionEvents();
     },
     setupEngine() {
       this.engine = Engine.create();
@@ -80,13 +73,6 @@ export default {
       Runner.run(this.runner, this.engine);
     },
     setupWorld() {
-      this.circle = Bodies.circle(700, 500, 40, {
-        mass: 200,
-        render,
-        collisionFilter: {
-          category: this.circleCategory
-        }
-      });
       World.add(this.world, [
         // falling blocks
 
@@ -145,29 +131,27 @@ export default {
       ]);
     },
     setupMouse() {
-      const mouse = Mouse.create(this.render.canvas);
-      const mouseConstraint = MouseConstraint.create(this.engine, {
-        mouse: mouse,
-        constraint: {
-          stiffness: 0.2,
-          render: {
-            visible: false
+      var mouse = Mouse.create(this.render.canvas),
+        mouseConstraint = MouseConstraint.create(this.engine, {
+          mouse: mouse,
+          constraint: {
+            stiffness: 0.2,
+            render: {
+              visible: false
+            }
           }
-        },
-        collisionFilter: {
-          mask: this.circleCategory
-        }
-      });
+        });
       World.add(this.world, mouseConstraint);
-      this.render.mouse = mouse;
-      Render.lookAt(this.render, {
+
+    // keep the mouse in sync with rendering
+    this.render.mouse = mouse;
+
+    // fit the render viewport to the scene
+    Render.lookAt(this.render, {
         min: { x: 0, y: 0 },
         max: { x: 800, y: 600 }
-      });
-    },
-    listenForCollisionEvents() {
-      
-    } 
+    });
+    }
   }
 };
 </script>
