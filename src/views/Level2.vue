@@ -127,7 +127,10 @@ export default {
           }
         }),
         // walls
-        Bodies.rectangle(220, 600, 1600, 50, { isStatic: true })
+        Bodies.rectangle(220, 600, 1600, 50, { isStatic: true }),
+        Bodies.rectangle(-550, 100, 50, 1000, { isStatic: true }),
+        Bodies.rectangle(970, 100, 50, 1000, { isStatic: true }),
+        Bodies.rectangle(220, 0, 1600, 50, { isStatic: true })
       ]);
     },
     setupMouse() {
