@@ -16,8 +16,8 @@ import {
   MouseConstraint,
   Mouse,
   World,
-  Bodies,
-  Body
+  Body,
+  Bodies
 } from "matter-js";
 import LevelNavigation from "@/components/LevelNavigation";
 export default {
@@ -42,9 +42,6 @@ export default {
   },
   mounted() {
     this.setup();
-  },
-  beforeUpdate() {
-    Body.setMass(this.circle, this.mass);
   },
   methods: {
     setup() {
@@ -73,55 +70,105 @@ export default {
       Runner.run(this.runner, this.engine);
     },
     setupWorld() {
+      const group = Body.nextGroup(true);
       World.add(this.world, [
         // falling blocks
 
         Bodies.rectangle(-200, 100, 100, 100, {
+          collisionFilter: {
+            group: group
+          },
+          //isSensor: true,
+          inertia: Infinity,
           render: {
             fillStyle: "red"
           }
         }),
         Bodies.rectangle(0, 100, 100, 100, {
+          collisionFilter: {
+            group: group
+          },
+          //isSensor: true,
+          inertia: Infinity,
           render: {
             fillStyle: "blue"
           }
         }),
         Bodies.rectangle(200, 100, 100, 100, {
+          collisionFilter: {
+            group: group
+          },
+          inertia: Infinity,
           render: {
             fillStyle: "green"
           }
         }),
         Bodies.rectangle(400, 100, 100, 100, {
+          collisionFilter: {
+            group: group
+          },
+          //isSensor: true,
+          inertia: Infinity,
           render: {
             fillStyle: "yellow"
           }
         }),
         Bodies.rectangle(-200, 500, 100, 100, {
+          collisionFilter: {
+            group: group
+          },
+          //isSensor: true,
+          inertia: Infinity,
           render: {
             fillStyle: "white"
           }
         }),
         Bodies.rectangle(0, 500, 100, 100, {
+          collisionFilter: {
+            group: group
+          },
+          //isSensor: true,
+          inertia: Infinity,
           render: {
             fillStyle: "black"
           }
         }),
         Bodies.rectangle(200, 500, 100, 100, {
+          collisionFilter: {
+            group: group
+          },
+          //isSensor: true,
+          inertia: Infinity,
           render: {
             fillStyle: "purple"
           }
         }),
         Bodies.rectangle(400, 500, 100, 100, {
+          collisionFilter: {
+            group: group
+          },
+          //isSensor: true,
+          inertia: Infinity,
           render: {
             fillStyle: "yellow"
           }
         }),
         Bodies.rectangle(600, 100, 100, 100, {
+          collisionFilter: {
+            group: group
+          },
+          //isSensor: true,
+          inertia: Infinity,
           render: {
             fillStyle: "blue"
           }
         }),
         Bodies.rectangle(600, 500, 100, 100, {
+          collisionFilter: {
+            group: group
+          },
+          //isSensor: true,
+          inertia: Infinity,
           render: {
             fillStyle: "red"
           }
