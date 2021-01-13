@@ -71,7 +71,7 @@ export default {
             this.setupEngine();
             this.setupWorld();
             this.setupMouse();
-            this.slingShot();
+            this.slingShot(this.ball, this.sling);
             this.listenForCollisionEvents();
         },
 
@@ -130,17 +130,18 @@ export default {
             ]);
 
         },
-        slingShot() {
-            var firing = false;
+        slingShot(ball, sling) {
+            let firing = false;
             Events.on(this.mouseConstraint, 'enddrag', function (e) {
-              console.log("pull");
-                if (e.Body === this.ball) firing = true;
+                if (e.Body === this.ball) {
+                    firing = true;
+                };
             });
             Events.on(this.engine, 'afterUpdate', function () {
-                if (firing && Math.abs(this.ball.position.x - 300) < 20 && Math.abs(this.ball.position.y - 600) < 20) {
-                    this.ball = Bodies.circle(170, 450, 20);
-                    World.add(this.engine.world, this.ball);
-                    this.sling.bodyB = this.ball;
+                if (firing && Math.abs(ball.position.x - 170) < 20 && Math.abs(ball.position.y - 450) < 20) {
+                    ball = Bodies.circle(170, 450, 20);
+                    World.add(this.world, ball);
+                    sling.bodyB = ball;
                     firing = false;
                 }
             });
