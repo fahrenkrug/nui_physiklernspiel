@@ -44,9 +44,9 @@ export default {
             circleCategory: 0x0002,
             collisionReject: null,
             mass: 0.1,
-            mouseConstraint: null,
             ball: null,
             sling: null,
+            mouseConstraint: null,
         };
     },
     computed: {
@@ -132,8 +132,9 @@ export default {
         },
         slingShot() {
             var firing = false;
-            Events.on(MouseConstraint, 'enddrag', function (e) {
-                if (e.body === this.ball) firing = true;
+            Events.on(this.mouseConstraint, 'enddrag', function (e) {
+              console.log("pull");
+                if (e.Body === this.ball) firing = true;
             });
             Events.on(this.engine, 'afterUpdate', function () {
                 if (firing && Math.abs(this.ball.position.x - 300) < 20 && Math.abs(this.ball.position.y - 600) < 20) {
@@ -143,11 +144,10 @@ export default {
                     firing = false;
                 }
             });
-            World.add(this.world, this.ball, this.sling, firing);
         },
         setupMouse() {
             const mouse = Mouse.create(this.render.canvas);
-            const mouseConstraint = MouseConstraint.create(this.engine, {
+            this.mouseConstraint = MouseConstraint.create(this.engine, {
                 mouse: mouse,
                 constraint: {
                     stiffness: 0.2,
@@ -155,11 +155,8 @@ export default {
                         visible: false
                     }
                 },
-                collisionFilter: {
-                    mask: this.circleCategory
-                }
             });
-            World.add(this.world, mouseConstraint);
+            World.add(this.world, this.mouseConstraint);
             this.render.mouse = mouse;
             Render.lookAt(this.render, {
                 min: {
