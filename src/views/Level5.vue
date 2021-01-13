@@ -111,7 +111,9 @@ export default {
             const pyramid2 = Composites.pyramid(550, 0, 5, 10, 0, 0, function (x, y) {
                 return Bodies.rectangle(x, y, 25, 40);
             });
-            this.ball = Bodies.circle(170, 450, 20);
+            this.ball = Bodies.circle(170, 450, 20, {
+                mass: 200,
+            });
             this.sling = Constraint.create({
                 pointA: {
                     x: 170,
@@ -139,7 +141,9 @@ export default {
             });
             Events.on(this.engine, 'afterUpdate', function () {
                 if (firing && Math.abs(ball.position.x - 170) < 20 && Math.abs(ball.position.y - 450) < 20) {
-                    ball = Bodies.circle(170, 450, 20);
+                    ball = Bodies.circle(170, 450, 20, {
+                        mass: 200,
+                    });
                     World.add(this.world, ball);
                     sling.bodyB = ball;
                     firing = false;
