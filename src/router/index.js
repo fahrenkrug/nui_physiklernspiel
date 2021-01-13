@@ -30,6 +30,11 @@ const routes = [
       import(/* webpackChunkName: "level4" */ "../views/Level4.vue")
   },
   {
+    path: "/levels/5",
+    component: () =>
+      import(/* webpackChunkName: "level5" */ "../views/Level5.vue")
+  },
+  {
     path: "/profile",
     component: () =>
       import(/* webpackChunkName: "profile" */ "../views/Profile")
