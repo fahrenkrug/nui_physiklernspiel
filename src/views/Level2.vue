@@ -55,6 +55,7 @@ export default {
       mass: 0.1,
       mouseConstraint: null,
       bodySelected: null,
+       balkCategory: 0x0002,
     };
   },
   computed: {
@@ -110,7 +111,7 @@ export default {
       var a = 0.4;
       for (var i = 0; i < 4; i++) {
         this.balks.push(
-          Bodies.rectangle(100, y, 300, 20, {
+          Bodies.rectangle(200, y, 300, 20, {
             isStatic: true,
             id: "30" + 1,
             angle: a,
@@ -123,6 +124,9 @@ export default {
                 "," +
                 randomBetween(50, 200) +
                 ")",
+            },
+            collisionFilter: {
+              category: this.balkCategory,
             },
           })
         );
@@ -220,6 +224,9 @@ export default {
       render.mouse = this.mouse;
       this.mouseConstraint = MouseConstraint.create(this.engine, {
         mouse: this.mouse,
+        collisionFilter: {
+          mask: this.balkCategory,
+        },
       });
       World.add(this.world, this.mouseConstraint);
 

@@ -61,6 +61,7 @@ export default {
       bodySelected: null,
       compositeSelected: null,
       draggables: [],
+      balkCategory: 0x0002,
     };
   },
   computed: {
@@ -158,33 +159,87 @@ export default {
       );
 
       //balks
-      let d = Bodies.rectangle(500, 100, 200, 10, {
+      let d = Bodies.rectangle(500, 600, 200, 20, {
         isStatic: true,
+        restitution: 1,
+        friction: 0,
         label: "draggable",
         id: "300",
+        render: {
+          fillStyle:
+            "rgb(" +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            ")",
+        },
+        collisionFilter: {
+          category: this.balkCategory,
+        },
       });
       Body.rotate(d, 0.65);
       this.draggables.push(d);
 
-      d = Bodies.rectangle(300, 100, 300, 10, {
+      d = Bodies.rectangle(300, 550, 300, 20, {
         isStatic: true,
         label: "draggable",
         id: "301",
+        render: {
+          fillStyle:
+            "rgb(" +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            ")",
+        },
+        collisionFilter: {
+          category: this.balkCategory,
+        },
       });
       Body.rotate(d, 0.65);
       this.draggables.push(d);
 
-      d = Bodies.rectangle(700, 100, 300, 10, {
+      d = Bodies.rectangle(700, 600, 300, 20, {
         isStatic: true,
         label: "draggable",
         id: "302",
+        render: {
+          fillStyle:
+            "rgb(" +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            ")",
+        },
+        collisionFilter: {
+          category: this.balkCategory,
+        },
       });
       this.draggables.push(d);
 
-      d = Bodies.rectangle(100, 100, 200, 10, {
+      d = Bodies.rectangle(150, 600, 200, 20, {
         isStatic: true,
         label: "draggable",
         id: "303",
+        render: {
+          fillStyle:
+            "rgb(" +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            ")",
+        },
+        collisionFilter: {
+          category: this.balkCategory,
+        },
       });
 
       this.draggables.push(d);
@@ -260,6 +315,9 @@ export default {
       render.mouse = this.mouse;
       this.mouseConstraint = MouseConstraint.create(this.engine, {
         mouse: this.mouse,
+        collisionFilter: {
+          mask: this.balkCategory,
+        },
       });
       World.add(this.world, this.mouseConstraint);
 
@@ -275,6 +333,10 @@ export default {
         let y = render.mouse.position.y;
 
         if (!render.mouse.position.x) {
+          return;
+        }
+
+        if (constraint.body == this.marble) {
           return;
         }
 
@@ -301,6 +363,11 @@ export default {
         if (this.bodySelected == null) {
           return;
         }
+
+        if (this.bodySelected == this.marble) {
+          return;
+        }
+
         console.log(event);
 
         let element = this.bodySelected;
@@ -379,7 +446,7 @@ export default {
       const b = randomBetween(50, 200);
 
       this.marble = Bodies.circle(150, 100, 25, {
-         frictionAir: 0,
+        frictionAir: 0,
         friction: 0,
         frictionStatic: 1,
         inertia: Infinity,
