@@ -5,7 +5,7 @@
     <v-row>
         <v-col cols="4">Masse: {{ mass }}</v-col>
         <v-col>
-            <v-slider :max="maxMass" :min="minMass" v-model="mass" class="slider" />
+
         </v-col>
     </v-row>
 </v-container>
@@ -23,11 +23,15 @@ import {
     Bodies,
     Body,
     Events,
-    Composites
 } from "matter-js";
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
 
+const render = {
+    fillStyle: "#000",
+    strokeStyle: "#fff",
+    lineWidth: 3
+};
 export default {
     name: "Level5",
     components: {
@@ -43,22 +47,17 @@ export default {
             circle: null,
             circleCategory: 0x0002,
             collisionReject: null,
-            mass: 0.1,
+            mass: 400,
             ball: null,
             sling: null,
             mouseConstraint: null,
+            firing: false,
         };
     },
     computed: {
         world() {
             return this.engine.world;
         },
-        maxMass() {
-            return 4000;
-        },
-        minMass() {
-            return 1;
-        }
     },
     mounted() {
         this.setup();
@@ -71,7 +70,7 @@ export default {
             this.setupEngine();
             this.setupWorld();
             this.setupMouse();
-            this.slingShot(this.ball, this.sling);
+            this.slingShot(this.ball, this.sling, this.firing);
             this.listenForCollisionEvents();
         },
 
@@ -83,6 +82,10 @@ export default {
                 showAngleIndicator: true,
                 showCollisions: true,
                 showVelocity: true,
+                gravity: {
+                    x: 0,
+                    y: 1
+                },
                 options: {
                     width: window.screen.availWidth - 20,
                     height: window.screen.availHeight - 310,
@@ -96,53 +99,63 @@ export default {
 
         setupWorld() {
             // add bodies
-            var ground = Bodies.rectangle(395, 600, 815, 50, {
-                isStatic: true
+            const group = Body.nextGroup(true);
+            const target = Bodies.rectangle(610, 250, 100, 20, {
+                isStatic: true,
+                render,
+                collisionFilter: {
+                    group: group
+                },
             });
-
-            const pyramid = Composites.pyramid(500, 300, 9, 10, 0, 0, function (x, y) {
-                return Bodies.rectangle(x, y, 25, 40);
+            const target_v = Bodies.rectangle(660, 235, 20, 50, {
+                isStatic: true,
+                render,
+                collisionFilter: {
+                    group: group
+                },
             });
-
-            const ground2 = Bodies.rectangle(610, 250, 200, 20, {
-                isStatic: true
+            const target_2 = Bodies.rectangle(810, 100, 100, 20, {
+                isStatic: true,
+                render,
             });
-
-            const pyramid2 = Composites.pyramid(550, 0, 5, 10, 0, 0, function (x, y) {
-                return Bodies.rectangle(x, y, 25, 40);
+            const target_2v = Bodies.rectangle(860, 85, 20, 50, {
+                isStatic: true,
+                render,
             });
-            this.ball = Bodies.circle(170, 450, 20, {
-                mass: 200,
+            this.ball = Bodies.rectangle(70, 450, 20, 20, {
+                mass: 400,
+                collisionFilter: {
+                    category: this.circleCategory
+                }
             });
             this.sling = Constraint.create({
                 pointA: {
-                    x: 170,
+                    x: 70,
                     y: 450
                 },
                 bodyB: this.ball,
-                stiffness: 0.05
+                stiffness: 0.03
             });
             World.add(this.world, [
-                ground,
-                pyramid,
-                ground2,
-                pyramid2,
+                target,
+                target_v,
+                target_2,
+                target_2v,
                 this.ball,
                 this.sling
             ]);
 
         },
-        slingShot(ball, sling) {
-            let firing = false;
+        slingShot(ball, sling, firing) {
             Events.on(this.mouseConstraint, 'enddrag', function (e) {
                 if (e.Body === this.ball) {
                     firing = true;
                 };
             });
             Events.on(this.engine, 'afterUpdate', function () {
-                if (firing && Math.abs(ball.position.x - 170) < 20 && Math.abs(ball.position.y - 450) < 20) {
-                    ball = Bodies.circle(170, 450, 20, {
-                        mass: 200,
+                if (firing && Math.abs(ball.position.x - 70) < 20 && Math.abs(ball.position.y - 450) < 20) {
+                    ball = Bodies.rectangle(70, 450, 20, 20, {
+                        mass: 400,
                     });
                     World.add(this.world, ball);
                     sling.bodyB = ball;
@@ -160,6 +173,9 @@ export default {
                         visible: false
                     }
                 },
+                collisionFilter: {
+                    mask: this.circleCategory
+                }
             });
             World.add(this.world, this.mouseConstraint);
             this.render.mouse = mouse;
@@ -192,8 +208,10 @@ export default {
         },
         isGoalPair(pair) {
             return (
-                (pair.bodyA === this.jumpingBox && pair.bodyB === this.target) ||
-                (pair.bodyB === this.jumpingBox && pair.bodyA === this.target)
+                (pair.bodyA === this.ball && pair.bodyB === this.target) ||
+                (pair.bodyB === this.ball && pair.bodyA === this.target) &&
+                (pair.bodyA === this.ball && pair.bodyB === this.target_2) ||
+                (pair.bodyB === this.ball && pair.bodyA === this.target_2)
             );
         },
         waitIfCollisionStays() {
