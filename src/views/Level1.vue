@@ -121,7 +121,7 @@ export default {
         Bodies.rectangle(250, 555, 20, 50, { isStatic: true, render }),
         Bodies.rectangle(400, 535, 20, 80, {
           isStatic: true,
-          collisionFilter: { group: group },
+          collisionFilter: { group },
           render
         }),
         this.circle,
