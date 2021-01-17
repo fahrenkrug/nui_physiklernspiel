@@ -31,7 +31,7 @@ const render = {
   lineWidth: 3
 };
 export default {
-  name: "Level1",
+  name: "Level5",
   components: {
     LevelNavigation
   },
