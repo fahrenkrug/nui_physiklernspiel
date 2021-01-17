@@ -27,6 +27,7 @@ import {
 } from "matter-js";
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
+import { GAME_IDENTIFIER } from "@/store/modules/game";
 
 const render = {
   fillStyle: "#000",
@@ -192,7 +193,10 @@ export default {
       this.collisionReject(new Error("Collision was just temporary."));
     },
     async onGoalCollision() {
-      await this.$store.dispatch("level/didAchieveLevel", { number: 1 });
+      await this.$store.dispatch("level/didAchieveLevel", {
+        number: 2,
+        gameIdentifier: GAME_IDENTIFIER.CATAPULT
+      });
       const { isConfirmed } = await SweetAlert.fire({
         title: "Sehr gut!",
         icon: "success",
@@ -201,7 +205,7 @@ export default {
         showCancelButton: true
       });
       if (isConfirmed) {
-        await this.$router.push("/levels/2");
+        await this.$router.push("/games/catapult/levels/3");
       }
     }
   }

@@ -185,7 +185,10 @@ export const level = {
   actions: {
     didAchieveLevel: ({ commit, state }, payload) => {
       commit("DID_ACHIEVE_LEVEL", payload);
-      commit("SET_LEVEL_ACCESS", payload.number + 1);
+      commit("SET_LEVEL_ACCESS", {
+        ...payload,
+        number: payload.number + 1
+      });
       localStorage.setItem("levels", JSON.stringify(state.levels));
       return Promise.resolve();
     },

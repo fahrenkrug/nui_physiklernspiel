@@ -13,7 +13,7 @@
       <v-btn
         color="orange lighten-2"
         text
-        :to="`/levels/${level.gameIdentifier}/levels/${level.number}`"
+        :to="`/games/${level.gameIdentifier}/levels/${level.number}`"
         :disabled="!level.canBeAccessed"
       >
         {{ level.canBeAccessed ? "Anschauen" : "Noch nicht freigespielt" }}
