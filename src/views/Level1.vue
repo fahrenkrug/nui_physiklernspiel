@@ -1,37 +1,42 @@
 <template>
-  <v-container>
-    <level-navigation />
-    <div id="matterJsElement"></div>
-    <v-row>
-      <v-col cols="4">Masse: {{ mass }}</v-col>
-      <v-col>
-        <v-slider :max="maxMass" :min="minMass" v-model="mass" class="slider" />
-      </v-col>
-    </v-row>
-  </v-container>
+  <div class="level">
+    <v-container>
+      <level-navigation />
+      <div id="matterJsElement"></div>
+      <v-row>
+        <v-col cols="4"></v-col>
+        <v-col>
+          <v-btn @click="addMarble()">Add Marble</v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
+
 
 <script>
 import {
   Engine,
   Render,
   Runner,
-  Constraint,
+  //Constraint,
   MouseConstraint,
   Mouse,
   World,
   Bodies,
   Body,
-  Vector,
-  Events
+  //Vector,
+  Events,
 } from "matter-js";
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
+//import Keypress from "vue-keypress";
+//import func from "../../vue-temp/vue-editor-bridge";
 
 const render = {
   fillStyle: "#000",
-  strokeStyle: "#fff",
-  lineWidth: 3
+  strokeStyle: "rgb(49,51,53)",
+  lineWidth: 3,
 };
 
 export default {
@@ -42,12 +47,15 @@ export default {
       engine: null,
       render: null,
       runner: null,
-      target: null,
-      jumpingBox: null,
-      circle: null,
-      circleCategory: 0x0002,
-      collisionReject: null,
-      mass: 0.1
+      bucket: null,
+      marbles: [],
+      marble: null,
+      balks: [],
+      walls: [],
+      mass: 0.1,
+      mouseConstraint: null,
+      bodySelected: null,
+      balkCategory: 0x0002,
     };
   },
   computed: {
@@ -59,14 +67,13 @@ export default {
     },
     minMass() {
       return 1;
-    }
+    },
   },
   mounted() {
     this.setup();
   },
-  beforeUpdate() {
-    Body.setMass(this.circle, this.mass);
-  },
+
+  beforeUpdate() {},
   methods: {
     setup() {
       this.setupEngine();
@@ -85,75 +92,223 @@ export default {
         options: {
           width: window.screen.availWidth - 20,
           height: window.screen.availHeight - 310,
-          wireframes: false
-        }
+          wireframes: false,
+        },
       });
       Render.run(this.render);
       this.runner = Runner.create();
       Runner.run(this.runner, this.engine);
     },
     setupWorld() {
-      const group = Body.nextGroup(true);
+      const randomBetween = (min, max) =>
+        min + Math.floor(Math.random() * (max - min + 1));
+      const r = randomBetween(50, 200);
+      const g = randomBetween(50, 200);
+      const b = randomBetween(50, 200);
 
-      this.jumpingBox = Bodies.rectangle(255, 355, 30, 30, { render });
+      //balks
+      var y = 300;
+      var a = 0.4;
+      for (var i = 0; i < 4; i++) {
+        this.balks.push(
+          Bodies.rectangle(200, y, 300, 20, {
+            isStatic: true,
+            id: "30" + 1,
+            angle: a,
+            render: {
+              fillStyle:
+                "rgb(" +
+                randomBetween(50, 200) +
+                "," +
+                randomBetween(50, 200) +
+                "," +
+                randomBetween(50, 200) +
+                ")",
+            },
+            collisionFilter: {
+              category: this.balkCategory,
+            },
+          })
+        );
 
-      const catapult = Bodies.rectangle(400, 520, 320, 20, {
-        collisionFilter: { group },
-        render
-      });
+        y = y + 100;
 
-      this.circle = Bodies.circle(700, 500, 40, {
-        mass: 200,
-        render,
-        collisionFilter: {
-          category: this.circleCategory
+        if (a != 0) {
+          a = 0;
+        } else {
+          a = 0.4;
         }
-      });
-      this.target = Bodies.rectangle(440, 200, 40, 14, {
-        isStatic: true,
-        render
-      });
-      World.add(this.world, [
-        this.jumpingBox,
-        catapult,
-        this.target,
-        Bodies.rectangle(400, 600, 800, 50.5, { isStatic: true, render }),
-        Bodies.rectangle(250, 555, 20, 50, { isStatic: true, render }),
-        Bodies.rectangle(400, 535, 20, 80, {
+      }
+
+      this.balks.push(
+        Bodies.rectangle(450, 400, 300, 20, {
           isStatic: true,
-          collisionFilter: { group: group },
-          render
-        }),
-        this.circle,
-        Constraint.create({
-          bodyA: catapult,
-          pointB: Vector.clone(catapult.position),
-          stiffness: 1,
-          length: 0
+          id: "304",
+          angle: -0.5,
+          render: {
+            fillStyle:
+              "rgb(" +
+              randomBetween(50, 200) +
+              "," +
+              randomBetween(50, 200) +
+              "," +
+              randomBetween(50, 200) +
+              ")",
+          },
+          collisionFilter: {
+            category: this.balkCategory,
+          },
         })
+      );
+
+      World.add(this.world, this.balks);
+
+      this.bucket = Bodies.rectangle(
+        window.screen.availWidth - 140 - 200,
+        window.screen.availHeight - 310 - 20,
+        150,
+        9,
+        {
+          isStatic: true,
+          render: {
+            fillStyle: "rgb(" + r + "," + g + "," + b + ")",
+          },
+        }
+      );
+
+      render.fillStyle = "rgb(49,51,53)";
+      World.add(this.world, [
+        //walls
+        Bodies.rectangle(
+          (window.screen.availWidth - 20) / 2,
+          8,
+          window.screen.availWidth - 20,
+          10,
+          { isStatic: true, render }
+        ),
+        Bodies.rectangle(
+          (window.screen.availWidth - 20) / 2,
+          window.screen.availHeight - 310 - 8,
+          window.screen.availWidth - 20,
+          10,
+          { isStatic: true, render }
+        ),
+        Bodies.rectangle(
+          7,
+          (window.screen.availHeight - 310) / 2,
+          10,
+          window.screen.availHeight - 310,
+          { isStatic: true, render }
+        ),
+        Bodies.rectangle(
+          window.screen.availWidth - 20 - 7,
+          (window.screen.availHeight - 310) / 2,
+          10,
+          window.screen.availHeight - 310,
+          { isStatic: true, render }
+        ),
+
+        //top bucket
+        Bodies.rectangle(100, 50, 10, 70, { isStatic: true, render }),
+        Bodies.rectangle(200, 50, 10, 70, { isStatic: true, render }),
+
+        //bottom bucket
+        Bodies.rectangle(
+          window.screen.availWidth - 20 - 50 - 200,
+          window.screen.availHeight - 310 - 50,
+          10,
+          70,
+          {
+            isStatic: true,
+            render: {
+              fillStyle: "rgb(" + r + "," + g + "," + b + ")",
+            },
+          }
+        ),
+        Bodies.rectangle(
+          window.screen.availWidth - 20 - 200 - 200,
+          window.screen.availHeight - 310 - 50,
+          10,
+          70,
+          {
+            isStatic: true,
+            render: {
+              fillStyle: "rgb(" + r + "," + g + "," + b + ")",
+            },
+          }
+        ),
+        this.bucket,
       ]);
     },
     setupMouse() {
-      const mouse = Mouse.create(this.render.canvas);
-      const mouseConstraint = MouseConstraint.create(this.engine, {
-        mouse: mouse,
-        constraint: {
-          stiffness: 0.2,
-          render: {
-            visible: false
-          }
-        },
+      this.mouse = Mouse.create(this.render.canvas);
+      render.mouse = this.mouse;
+      this.mouseConstraint = MouseConstraint.create(this.engine, {
+        mouse: this.mouse,
         collisionFilter: {
-          mask: this.circleCategory
+          mask: this.balkCategory,
+        },
+      });
+      World.add(this.world, this.mouseConstraint);
+
+      //var draggablesArray = this.draggables;
+      var constraint = this.mouseConstraint;
+
+      Events.on(this.mouseConstraint, "mousedown", function (event) {
+        console.log(event);
+
+        let element;
+
+        let x = render.mouse.position.x;
+        let y = render.mouse.position.y;
+
+        if (!render.mouse.position.x) {
+          return;
+        }
+
+        if (
+          constraint.body != null &&
+          (constraint.body.id == "300" ||
+            constraint.body.id == "301" ||
+            constraint.body.id == "302" ||
+            constraint.body.id == "303" ||
+            constraint.body.id == "304")
+        ) {
+          element = constraint.body;
+          this.bodySelected = element;
+
+          Body.setPosition(element, {
+            x: x,
+            y: y,
+          });
+
+          this.bodySelected = element;
         }
       });
-      World.add(this.world, mouseConstraint);
-      this.render.mouse = mouse;
-      Render.lookAt(this.render, {
-        min: { x: 0, y: 0 },
-        max: { x: 800, y: 600 }
+
+      Events.on(this.mouseConstraint, "mousemove", function (event) {
+        if (this.bodySelected == null) {
+          return;
+        }
+        console.log(event);
+
+        let element = this.bodySelected;
+
+        let x = render.mouse.position.x;
+        let y = render.mouse.position.y;
+
+        Body.setPosition(element, {
+          x: x,
+          y: y,
+        });
+      });
+
+      Events.on(this.mouseConstraint, "mouseup", function (event) {
+        console.log(event);
+        this.bodySelected = null;
       });
     },
+
     listenForCollisionEvents() {
       Events.on(this.engine, "collisionStart", async ({ pairs }) => {
         const goalPair = pairs.find(this.isGoalPair);
@@ -170,8 +325,8 @@ export default {
     },
     isGoalPair(pair) {
       return (
-        (pair.bodyA === this.jumpingBox && pair.bodyB === this.target) ||
-        (pair.bodyB === this.jumpingBox && pair.bodyA === this.target)
+        (pair.bodyA === this.bucket && pair.bodyB === this.marble) ||
+        (pair.bodyB === this.bucket && pair.bodyA === this.marble)
       );
     },
     waitIfCollisionStays() {
@@ -192,19 +347,42 @@ export default {
       this.collisionReject(new Error("Collision was just temporary."));
     },
     async onGoalCollision() {
-      await this.$store.dispatch("level/didAchieveLevel", { number: 1 });
+      await this.$store.dispatch("level/didAchieveLevel", { number: 2 });
       const { isConfirmed } = await SweetAlert.fire({
         title: "Sehr gut!",
         icon: "success",
         confirmButtonText: "Zum nächsten Level",
         cancelButtonText: "Abbrechen",
-        showCancelButton: true
+        showCancelButton: true,
       });
       if (isConfirmed) {
         await this.$router.push("/levels/2");
       }
-    }
-  }
+    },
+
+    addMarble() {
+      const randomBetween = (min, max) =>
+        min + Math.floor(Math.random() * (max - min + 1));
+      const r = randomBetween(50, 200);
+      const g = randomBetween(50, 200);
+      const b = randomBetween(50, 200);
+
+      this.marble = Bodies.circle(150, 100, 25, {
+        frictionAir: 0,
+        friction: 0,
+        frictionStatic: 1,
+        inertia: Infinity,
+        restitution: 0.9,
+        render: {
+          fillStyle: "rgb(" + r + "," + g + "," + b + ")",
+        },
+      });
+
+      World.add(this.world, this.marble);
+
+      this.bucket.render.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+    },
+  },
 };
 </script>
 

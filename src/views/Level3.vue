@@ -112,13 +112,13 @@ export default {
       const g = randomBetween(50, 200);
       const b = randomBetween(50, 200);
 
-      var cols = 8;
-      var rows = 3;
-      var radius = 20;
+      var cols = 5;
+      var rows = 1;
+      var radius = 15;
       var width = window.screen.availWidth - 20;
 
       //add obstacles
-      var spacing = width / cols;
+      var spacing = width / 4;
       for (var j = 0; j < rows; j++) {
         for (var i = 0; i < cols + 1; i++) {
           var x = i * spacing;
@@ -146,7 +146,7 @@ export default {
       }
 
       this.bucket = Bodies.rectangle(
-        window.screen.availWidth - 140,
+        window.screen.availWidth - 240,
         window.screen.availHeight - 310 - 20,
         150,
         9,
@@ -244,6 +244,28 @@ export default {
 
       this.draggables.push(d);
 
+      d = Bodies.rectangle(150, 640, 200, 20, {
+        isStatic: true,
+        restitution: 1,
+        friction: 0,
+        label: "draggable",
+        id: "304",
+        render: {
+          fillStyle:
+            "rgb(" +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            ")",
+        },
+        collisionFilter: {
+          category: this.balkCategory,
+        },
+      });
+      this.draggables.push(d);
+
       World.add(this.world, this.draggables);
 
       render.fillStyle = "rgb(49,51,53)";
@@ -284,7 +306,7 @@ export default {
 
         //bottom bucket
         Bodies.rectangle(
-          window.screen.availWidth - 20 - 50,
+          window.screen.availWidth - 20 - 150,
           window.screen.availHeight - 310 - 50,
           10,
           70,
@@ -296,7 +318,7 @@ export default {
           }
         ),
         Bodies.rectangle(
-          window.screen.availWidth - 20 - 200,
+          window.screen.availWidth - 20 - 300,
           window.screen.availHeight - 310 - 50,
           10,
           70,
@@ -345,7 +367,8 @@ export default {
           (constraint.body.id == "300" ||
             constraint.body.id == "301" ||
             constraint.body.id == "302" ||
-            constraint.body.id == "303")
+            constraint.body.id == "303" ||
+            constraint.body.id == "304")
         ) {
           element = constraint.body;
           this.bodySelected = element;
