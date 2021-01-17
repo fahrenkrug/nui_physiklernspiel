@@ -10,29 +10,80 @@ const routes = [
     component: Home
   },
   {
-    path: "/levels/1",
-    component: () =>
-      import(/* webpackChunkName: "level1" */ "../views/Level1.vue")
+    path: "/games/:slug",
+    component: () => import(/* webpackChunkName: "game" */ "../views/Game.vue")
   },
   {
-    path: "/levels/2",
+    path: "/games/catapult/levels/1",
     component: () =>
-      import(/* webpackChunkName: "level2" */ "../views/Level2.vue")
+      import(
+        /* webpackChunkName: "catapultLevel1" */ "../views/catapult/Level1"
+      )
   },
   {
-    path: "/levels/3",
+    path: "/games/catapult/levels/2",
     component: () =>
-      import(/* webpackChunkName: "level3" */ "../views/Level3.vue")
+      import(
+        /* webpackChunkName: "catapultLevel2" */ "../views/catapult/Level2"
+      )
   },
   {
-    path: "/levels/4",
+    path: "/games/catapult/levels/3",
     component: () =>
-      import(/* webpackChunkName: "level4" */ "../views/Level4.vue")
+      import(
+        /* webpackChunkName: "catapultLevel3" */ "../views/catapult/Level3"
+      )
   },
   {
-    path: "/profile",
+    path: "/games/marble/levels/1",
     component: () =>
-      import(/* webpackChunkName: "profile" */ "../views/Profile")
+      import(/* webpackChunkName: "marbleLevel1" */ "../views/marble/Level1")
+  },
+  {
+    path: "/games/marble/levels/2",
+    component: () =>
+      import(/* webpackChunkName: "marbleLevel2" */ "../views/marble/Level2")
+  },
+  {
+    path: "/games/marble/levels/3",
+    component: () =>
+      import(/* webpackChunkName: "marbleLevel3" */ "../views/marble/Level3")
+  },
+  {
+    path: "/games/slingshot/levels/1",
+    component: () =>
+      import(
+        /* webpackChunkName: "slingshotLevel1" */ "../views/slingshot/Level1"
+      )
+  },
+  {
+    path: "/games/slingshot/levels/2",
+    component: () =>
+      import(
+        /* webpackChunkName: "slingshotLevel2" */ "../views/slingshot/Level2"
+      )
+  },
+  {
+    path: "/games/slingshot/levels/3",
+    component: () =>
+      import(
+        /* webpackChunkName: "slingshotLevel3" */ "../views/slingshot/Level3"
+      )
+  },
+  {
+    path: "/games/colors/levels/1",
+    component: () =>
+      import(/* webpackChunkName: "colorsLevel1" */ "../views/colors/Level1")
+  },
+  {
+    path: "/games/colors/levels/2",
+    component: () =>
+      import(/* webpackChunkName: "colorsLevel2" */ "../views/colors/Level2")
+  },
+  {
+    path: "/games/colors/levels/3",
+    component: () =>
+      import(/* webpackChunkName: "colorsLevel3" */ "../views/colors/Level3")
   }
 ];
 

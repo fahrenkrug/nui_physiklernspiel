@@ -1,13 +1,13 @@
 <template>
   <v-container>
-    <v-row v-for="rowIndex in levels.length / levelsPerRow" :key="rowIndex">
+    <v-row v-for="rowIndex in games.length / gamesPerRow" :key="rowIndex">
       <v-col
-        v-for="colIndex in levelsPerRow"
+        v-for="colIndex in gamesPerRow"
         :key="`row-${rowIndex}-col-${colIndex}`"
         cols="12"
         sm="6"
       >
-        <level-card :level="getLevel(rowIndex, colIndex)" />
+        <game-card :game="getGame(rowIndex, colIndex)" />
       </v-col>
     </v-row>
   </v-container>
@@ -15,20 +15,20 @@
 
 <script>
 import { mapState } from "vuex";
-import LevelCard from "@/components/LevelCard";
+import GameCard from "@/components/GameCard";
 
 export default {
   name: "Home",
-  components: { LevelCard },
+  components: { GameCard },
   computed: {
-    levelsPerRow() {
+    gamesPerRow() {
       return 2;
     },
-    ...mapState("level", ["levels"])
+    ...mapState("game", ["games"])
   },
   methods: {
-    getLevel(rowIndex, colIndex) {
-      return this.levels[(rowIndex - 1) * 2 + colIndex - 1];
+    getGame(rowIndex, colIndex) {
+      return this.games[(rowIndex - 1) * 2 + colIndex - 1];
     }
   }
 };
