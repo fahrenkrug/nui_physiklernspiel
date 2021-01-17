@@ -10,6 +10,10 @@ const routes = [
     component: Home
   },
   {
+    path: "/profile",
+    component: () => import(/* webpackChunkName: "game" */ "../views/Profile")
+  },
+  {
     path: "/games/:slug",
     component: () => import(/* webpackChunkName: "game" */ "../views/Game.vue")
   },
@@ -43,6 +47,11 @@ const routes = [
     path: "/games/marble/levels/2",
     component: () =>
       import(/* webpackChunkName: "marbleLevel2" */ "../views/marble/Level2")
+  },
+  {
+    path: "/games/marble/levels/4",
+    component: () =>
+      import(/* webpackChunkName: "marbleLevel4" */ "../views/marble/Level4")
   },
   {
     path: "/games/marble/levels/3",

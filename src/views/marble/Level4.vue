@@ -23,6 +23,7 @@ import {
   Mouse,
   World,
   Bodies,
+  //Composite,
   Body,
   //Vector,
   Events
@@ -39,7 +40,7 @@ const render = {
 };
 
 export default {
-  name: "Level2",
+  name: "Level4",
   components: { LevelNavigation },
   data() {
     return {
@@ -49,11 +50,16 @@ export default {
       bucket: null,
       marbles: [],
       marble: null,
-      balks: [],
+      obstacles: [],
       walls: [],
       mass: 0.1,
+      body: null,
       mouseConstraint: null,
+      mouse: null,
+      mode: 0,
       bodySelected: null,
+      compositeSelected: null,
+      draggables: [],
       balkCategory: 0x0002
     };
   },
@@ -105,40 +111,37 @@ export default {
       const g = randomBetween(50, 200);
       const b = randomBetween(50, 200);
 
-      //balks
-      var y = 300;
-      var a = 0.4;
-      for (var i = 0; i < 4; i++) {
-        this.balks.push(
-          Bodies.rectangle(200, y, 300, 20, {
-            isStatic: true,
-            id: "30" + 1,
-            angle: a,
-            render: {
-              fillStyle:
-                "rgb(" +
-                randomBetween(50, 200) +
-                "," +
-                randomBetween(50, 200) +
-                "," +
-                randomBetween(50, 200) +
-                ")"
-            },
-            collisionFilter: {
-              category: this.balkCategory
-            }
-          })
-        );
+      var cols = 8;
+      var rows = 3;
+      var radius = 20;
+      var width = window.screen.availWidth - 20;
 
-        y = y + 100;
+      //add obstacles
+      var spacing = width / cols;
+      for (var j = 0; j < rows; j++) {
+        for (var i = 0; i < cols + 1; i++) {
+          var x = i * spacing;
+          if (j % 2 == 0) {
+            x += spacing / 2;
+          }
+          var y = spacing + j * spacing;
 
-        if (a != 0) {
-          a = 0;
-        } else {
-          a = 0.4;
+          if (
+            !(y > window.screen.availHeight - 390) &&
+            !(x > window.screen.availWidth - 50 || x < 20)
+          ) {
+            var o = Bodies.circle(x, y, radius, {
+              restitution: 1,
+              friction: 0,
+              isStatic: true,
+              render: {
+                fillStyle: "white"
+              }
+            });
+            this.obstacles.push(o);
+            World.add(this.world, o);
+          }
         }
-
-        World.add(this.world, this.balks[i]);
       }
 
       this.bucket = Bodies.rectangle(
@@ -153,6 +156,94 @@ export default {
           }
         }
       );
+
+      //balks
+      let d = Bodies.rectangle(500, 600, 200, 20, {
+        isStatic: true,
+        restitution: 1,
+        friction: 0,
+        label: "draggable",
+        id: "300",
+        render: {
+          fillStyle:
+            "rgb(" +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            ")"
+        },
+        collisionFilter: {
+          category: this.balkCategory
+        }
+      });
+      Body.rotate(d, 0.65);
+      this.draggables.push(d);
+
+      d = Bodies.rectangle(300, 550, 300, 20, {
+        isStatic: true,
+        label: "draggable",
+        id: "301",
+        render: {
+          fillStyle:
+            "rgb(" +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            ")"
+        },
+        collisionFilter: {
+          category: this.balkCategory
+        }
+      });
+      Body.rotate(d, 0.65);
+      this.draggables.push(d);
+
+      d = Bodies.rectangle(700, 600, 300, 20, {
+        isStatic: true,
+        label: "draggable",
+        id: "302",
+        render: {
+          fillStyle:
+            "rgb(" +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            ")"
+        },
+        collisionFilter: {
+          category: this.balkCategory
+        }
+      });
+      this.draggables.push(d);
+
+      d = Bodies.rectangle(150, 600, 200, 20, {
+        isStatic: true,
+        label: "draggable",
+        id: "303",
+        render: {
+          fillStyle:
+            "rgb(" +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            "," +
+            randomBetween(50, 200) +
+            ")"
+        },
+        collisionFilter: {
+          category: this.balkCategory
+        }
+      });
+
+      this.draggables.push(d);
+
+      World.add(this.world, this.draggables);
 
       render.fillStyle = "rgb(49,51,53)";
       World.add(this.world, [
@@ -244,6 +335,10 @@ export default {
           return;
         }
 
+        if (constraint.body == this.marble) {
+          return;
+        }
+
         if (
           constraint.body != null &&
           (constraint.body.id == "300" ||
@@ -267,6 +362,11 @@ export default {
         if (this.bodySelected == null) {
           return;
         }
+
+        if (this.bodySelected == this.marble) {
+          return;
+        }
+
         console.log(event);
 
         let element = this.bodySelected;
@@ -324,7 +424,7 @@ export default {
       this.collisionReject(new Error("Collision was just temporary."));
     },
     async onGoalCollision() {
-      await this.$store.dispatch("level/didAchieveLevel", { number: 2 });
+      await this.$store.dispatch("level/didAchieveLevel", { number: 3 });
       const { isConfirmed } = await SweetAlert.fire({
         title: "Sehr gut!",
         icon: "success",
@@ -333,7 +433,7 @@ export default {
         showCancelButton: true
       });
       if (isConfirmed) {
-        await this.$router.push("/levels/3");
+        return;
       }
     },
 

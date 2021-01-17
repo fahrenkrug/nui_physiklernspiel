@@ -69,6 +69,17 @@ const levels = [
     gameIdentifier: GAME_IDENTIFIER.MARBLE
   },
   {
+    number: 4,
+    name: "Das große Rollen",
+    description:
+      "Werden die Murmeln mit deiner Hilfe das Ziel erreichen können?",
+    image:
+      "https://images.unsplash.com/photo-1453733190371-0a9bedd82893?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8cGh5c2ljc3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+    achieved: false,
+    canBeAccessed: false,
+    gameIdentifier: GAME_IDENTIFIER.MARBLE
+  },
+  {
     number: 1,
     name: "Die Schleuder",
     description:
