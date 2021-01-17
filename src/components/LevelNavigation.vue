@@ -31,6 +31,15 @@ import { mapState } from "vuex";
 export default {
   name: "LevelNavigation",
   computed: {
+    gameIdentifier() {
+      const regex = /(?<=games\/)\w+/;
+      return this.$route.path.match(regex)[0];
+    },
+    levelsForGame() {
+      return this.levels.filter(
+        ({ gameIdentifier }) => gameIdentifier === this.gameIdentifier
+      );
+    },
     levelNumber() {
       const split = this.$route.path.split("/");
       return parseInt(split[split.length - 1]);
@@ -45,7 +54,7 @@ export default {
       return this.previousLevelNumber > 0;
     },
     hasNextLevel() {
-      const level = this.levels.find(
+      const level = this.levelsForGame.find(
         ({ number }) => number === this.nextLevelNumber
       );
       return level ? level.canBeAccessed : false;
