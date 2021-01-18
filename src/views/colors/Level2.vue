@@ -3,9 +3,9 @@
     <level-navigation />
     <div id="matterJsElement"></div>
     <v-row>
-      <v-col cols="4"
+      <v-col cols="20"
         >Farbenspiel: Berühre zwei Quadrate und färbe die transparenten Quadrate
-        so in der gewünschten Farbe</v-col
+        so in der Farbe in der ihre Umrandungen sind. Mit dem transparenten Quadrat entfärbst du sie wieder.</v-col
       >
     </v-row>
   </v-container>
@@ -71,6 +71,7 @@ export default {
         options: {
           width: window.screen.availWidth - 20,
           height: window.screen.availHeight - 310,
+          background: "dimgrey",
           wireframes: false
         }
       });

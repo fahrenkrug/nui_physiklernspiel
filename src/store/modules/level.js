@@ -115,8 +115,7 @@ const levels = [
   {
     number: 1,
     name: "Farben mischen",
-    description:
-      "Hier lernt man wirklich einiges. Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm.",
+    description: "Hier kannst du einfache Farben mischen",
     image:
       "https://images.unsplash.com/photo-1589149098258-3e9102cd63d3?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8cGh5c2ljc3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     achieved: false,
@@ -126,8 +125,7 @@ const levels = [
   {
     number: 2,
     name: "Farbmischung Deluxe",
-    description:
-      "Hier lernt man wirklich einiges. Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm.",
+    description: "Hier wirst du mehr herausgefordert",
     image:
       "https://images.unsplash.com/photo-1589149098258-3e9102cd63d3?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8cGh5c2ljc3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     achieved: false,
@@ -136,9 +134,8 @@ const levels = [
   },
   {
     number: 3,
-    name: "Mischen Impossible",
-    description:
-      "Hier lernt man wirklich einiges. Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm.",
+    name: "Freies Mischen",
+    description: "Mische nach belieben ohne spezielle Aufgabe",
     image:
       "https://images.unsplash.com/photo-1589149098258-3e9102cd63d3?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8cGh5c2ljc3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     achieved: false,
