@@ -27,7 +27,7 @@ import {
   Events
 } from "matter-js";
 import SweetAlert from "sweetalert2";
-//import { GAME_IDENTIFIER } from "@/store/modules/game";
+import { GAME_IDENTIFIER } from "@/store/modules/game";
 import LevelNavigation from "@/components/LevelNavigation";
 export default {
   name: "Level2",
@@ -234,41 +234,37 @@ export default {
         })
       ]);
     },
-     async test(){
+    async test(){
       Events.on(this.engine, "collisionStart", async function(event) {
-      var pairs = event.pairs;
+        var pairs = event.pairs;
         let a = pairs[0].bodyA;
         let b = pairs[0].bodyB;
-       
-      if(a.id=="301" && a.render.fillStyle=="orange" || b.id=="301" && b.render.fillStyle=="orange"){
-        success = 1;
-      }
-      if(a.id=="302" && a.render.fillStyle=="purple" || b.id=="302" && b.render.fillStyle=="purple"){
-         success1 = 1;
-      }
-      if(a.id=="303" && a.render.fillStyle=="green" || b.id=="303" && b.render.fillStyle=="green" ){
-         success2 = 1;
-      }
-      if(success==1 && success1==1 && success2==1){
-        //const { isConfirmed } = 
-        await SweetAlert.fire({
-        title: "Sehr gut!",
-        icon: "success",
-        confirmButtonText: "Zum nächsten Level",
-        cancelButtonText: "Abbrechen",
-        showCancelButton: true
-      });
-      /*
-      await this.$store.dispatch("level/didAchieveLevel", {
-        number: 2,
-        gameIdentifier: GAME_IDENTIFIER.COLORS
-      });
-      if (isConfirmed) {
-        await this.$router.push("/games/colors/levels/3");  
-      }
-      */
-      }
-    
+
+        if(a.id=="301" && a.render.fillStyle=="orange" || b.id=="301" && b.render.fillStyle=="orange"){
+          success = 1;
+        }
+        if(a.id=="302" && a.render.fillStyle=="purple" || b.id=="302" && b.render.fillStyle=="purple"){
+          success1 = 1;
+        }
+        if(a.id=="303" && a.render.fillStyle=="green" || b.id=="303" && b.render.fillStyle=="green" ){
+          success2 = 1;
+        }
+        if(success==1 && success1==1 && success2==1){
+          const { isConfirmed } = await SweetAlert.fire({
+            title: "Sehr gut!",
+            icon: "success",
+            confirmButtonText: "Zum nächsten Level",
+            cancelButtonText: "Abbrechen",
+            showCancelButton: true
+          });
+          await this.$store.dispatch("level/didAchieveLevel", {
+            number: 2,
+            gameIdentifier: GAME_IDENTIFIER.COLORS
+          });
+          if (isConfirmed) {
+            await this.$router.push("/games/colors/levels/3");  
+          }
+        }
       });
     },
     setupMouse() {
