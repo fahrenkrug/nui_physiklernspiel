@@ -248,15 +248,16 @@ export default {
       if(a.id=="303" && a.render.fillStyle=="green" || b.id=="303" && b.render.fillStyle=="green" ){
          success2 = 1;
       }
-     /* if(success==1 && success1==1 && success2==1){
-        const { isConfirmed } = await SweetAlert.fire({
+      if(success==1 && success1==1 && success2==1){
+        //const { isConfirmed } = 
+        await SweetAlert.fire({
         title: "Sehr gut!",
         icon: "success",
         confirmButtonText: "Zum nächsten Level",
         cancelButtonText: "Abbrechen",
         showCancelButton: true
       });
-      
+      /*
       await this.$store.dispatch("level/didAchieveLevel", {
         number: 2,
         gameIdentifier: GAME_IDENTIFIER.COLORS
@@ -264,8 +265,9 @@ export default {
       if (isConfirmed) {
         await this.$router.push("/games/colors/levels/3");  
       }
+      */
       }
-    */
+    
       });
     },
     setupMouse() {
