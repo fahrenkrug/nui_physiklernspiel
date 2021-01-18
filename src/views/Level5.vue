@@ -27,11 +27,6 @@ import {
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
 
-const render = {
-    fillStyle: "#000",
-    strokeStyle: "#fff",
-    lineWidth: 3
-};
 export default {
     name: "Level5",
     components: {
@@ -99,34 +94,25 @@ export default {
 
         setupWorld() {
             // add bodies
-            const group = Body.nextGroup(true);
             const target = Bodies.rectangle(610, 250, 100, 20, {
                 isStatic: true,
-                render,
-                collisionFilter: {
-                    group: group
-                },
+                friction: 1,
             });
             const target_v = Bodies.rectangle(660, 235, 20, 50, {
                 isStatic: true,
-                render,
-                collisionFilter: {
-                    group: group
-                },
             });
             const target_2 = Bodies.rectangle(810, 100, 100, 20, {
                 isStatic: true,
-                render,
+                friction: 1,
             });
             const target_2v = Bodies.rectangle(860, 85, 20, 50, {
                 isStatic: true,
-                render,
             });
             this.ball = Bodies.rectangle(70, 450, 20, 20, {
                 mass: 400,
-                collisionFilter: {
-                    category: this.circleCategory
-                }
+                friction: 1,
+                inertia: Infinity,
+                id: 1,
             });
             this.sling = Constraint.create({
                 pointA: {
@@ -156,6 +142,9 @@ export default {
                 if (firing && Math.abs(ball.position.x - 70) < 20 && Math.abs(ball.position.y - 450) < 20) {
                     ball = Bodies.rectangle(70, 450, 20, 20, {
                         mass: 400,
+                        friction: 1,
+                        inertia: Infinity,
+                        id: 1,
                     });
                     World.add(this.world, ball);
                     sling.bodyB = ball;
@@ -173,9 +162,6 @@ export default {
                         visible: false
                     }
                 },
-                collisionFilter: {
-                    mask: this.circleCategory
-                }
             });
             World.add(this.world, this.mouseConstraint);
             this.render.mouse = mouse;
@@ -196,9 +182,11 @@ export default {
             }) => {
                 const goalPair = pairs.find(this.isGoalPair);
                 if (!goalPair) {
+                    console.log("false");
                     return;
                 }
                 try {
+                    console.log("true");
                     await this.waitIfCollisionStays();
                     await this.onGoalCollision();
                 } catch (e) {
@@ -207,11 +195,11 @@ export default {
             });
         },
         isGoalPair(pair) {
+            console.log("hit");
+            console.log(this.ball);
             return (
-                (pair.bodyA === this.ball && pair.bodyB === this.target) ||
-                (pair.bodyB === this.ball && pair.bodyA === this.target) &&
-                (pair.bodyA === this.ball && pair.bodyB === this.target_2) ||
-                (pair.bodyB === this.ball && pair.bodyA === this.target_2)
+                (pair.bodyA === this.ball && pair.bodyB === this.target_v) ||
+                (pair.bodyB === this.ball && pair.bodyA === this.target_v)
             );
         },
         waitIfCollisionStays() {
