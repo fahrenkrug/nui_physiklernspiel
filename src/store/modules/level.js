@@ -131,7 +131,7 @@ const levels = [
     image:
       "https://images.unsplash.com/photo-1589149098258-3e9102cd63d3?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8cGh5c2ljc3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     achieved: false,
-    canBeAccessed: false,
+    canBeAccessed: true,
     gameIdentifier: GAME_IDENTIFIER.COLORS
   },
   {
@@ -142,7 +142,7 @@ const levels = [
     image:
       "https://images.unsplash.com/photo-1589149098258-3e9102cd63d3?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8cGh5c2ljc3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     achieved: false,
-    canBeAccessed: false,
+    canBeAccessed: true,
     gameIdentifier: GAME_IDENTIFIER.COLORS
   }
 ];
