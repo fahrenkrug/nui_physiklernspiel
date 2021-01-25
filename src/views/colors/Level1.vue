@@ -5,7 +5,8 @@
     <v-row>
       <v-col cols="20"
         >Farbenspiel: Berühre zwei Quadrate und färbe die transparenten Quadrate
-        so in der Farbe in der ihre Umrandungen sind. Mit dem transparenten Quadrat entfärbst du sie wieder.</v-col
+        so in der Farbe in der ihre Umrandungen sind. Mit dem transparenten
+        Quadrat entfärbst du sie wieder.</v-col
       >
     </v-row>
   </v-container>
@@ -234,22 +235,31 @@ export default {
         })
       ]);
     },
-    test(){
-      Events.on(this.engine, "collisionStart", async function(event) {
+    test() {
+      Events.on(this.engine, "collisionStart", async event => {
         var pairs = event.pairs;
         let a = pairs[0].bodyA;
         let b = pairs[0].bodyB;
 
-        if(a.id=="301" && a.render.fillStyle=="olive" || b.id=="301" && b.render.fillStyle=="olive"){
+        if (
+          (a.id == "301" && a.render.fillStyle == "olive") ||
+          (b.id == "301" && b.render.fillStyle == "olive")
+        ) {
           success = 1;
         }
-        if(a.id=="302" && a.render.fillStyle=="darkred" || b.id=="302" && b.render.fillStyle=="darkred"){
+        if (
+          (a.id == "302" && a.render.fillStyle == "darkred") ||
+          (b.id == "302" && b.render.fillStyle == "darkred")
+        ) {
           success1 = 1;
         }
-        if(a.id=="303" && a.render.fillStyle=="lightcoral" || b.id=="303" && b.render.fillStyle=="lightcoral" ){
+        if (
+          (a.id == "303" && a.render.fillStyle == "lightcoral") ||
+          (b.id == "303" && b.render.fillStyle == "lightcoral")
+        ) {
           success2 = 1;
         }
-        if(success==1 && success1==1 && success2==1){
+        if (success == 1 && success1 == 1 && success2 == 1) {
           const { isConfirmed } = await SweetAlert.fire({
             title: "Sehr gut!",
             icon: "success",
