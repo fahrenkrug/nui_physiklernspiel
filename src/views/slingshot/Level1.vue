@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
 <v-container>
     <level-navigation />
@@ -209,10 +210,16 @@ export default {
             });
         },
         isGoalPair(pair) {
+            if ((pair.bodyA === this.ball && pair.bodyB === this.compoundBodyA) ||
+                (pair.bodyB === this.ball && pair.bodyA === this.compoundBodyA)) {
+                console.log("hit registered");
+            }
+            if ((pair.bodyA === this.ball && pair.bodyB === this.compoundBodyB) ||
+                (pair.bodyB === this.ball && pair.bodyA === this.compoundBodyB)) {
+                console.log("hit registered");
+            }
             console.log(pair);
             return (
-                /*(pair.bodyA === this.ball && pair.bodyB === this.target_v) ||
-                (pair.bodyB === this.ball && pair.bodyA === this.target_v)*/
                 true
             );
         },
