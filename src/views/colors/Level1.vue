@@ -3,15 +3,18 @@
     <level-navigation />
     <div id="matterJsElement"></div>
     <v-row>
-      <v-col cols="4"
+      <v-col cols="20"
         >Farbenspiel: Berühre zwei Quadrate und färbe die transparenten Quadrate
-        so in der gewünschten Farbe</v-col
+        so in der Farbe in der ihre Umrandungen sind. Mit dem transparenten Quadrat entfärbst du sie wieder.</v-col
       >
     </v-row>
   </v-container>
 </template>
 
 <script>
+var success = 0;
+var success1 = 0;
+var success2 = 0;
 import {
   Engine,
   Render,
@@ -23,9 +26,11 @@ import {
   Bodies,
   Events
 } from "matter-js";
+import SweetAlert from "sweetalert2";
+
 import LevelNavigation from "@/components/LevelNavigation";
 export default {
-  name: "Level2",
+  name: "Level3",
   components: { LevelNavigation },
   data() {
     return {
@@ -53,6 +58,7 @@ export default {
       this.setupWorld();
       this.setupMouse();
       this.listenForCollisionEvents();
+      this.test();
     },
     setupEngine() {
       this.engine = Engine.create();
@@ -65,6 +71,7 @@ export default {
         options: {
           width: window.screen.availWidth - 20,
           height: window.screen.availHeight - 310,
+          background: "dimgrey",
           wireframes: false
         }
       });
@@ -156,22 +163,23 @@ export default {
           },
           //isSensor: true,
           inertia: Infinity,
+          id: "301",
           render: {
             fillStyle: "transparent",
-            strokeStyle: "azure",
-            lineWidth: 0.5
+            strokeStyle: "olive",
+            lineWidth: 8
           }
         }),
         Bodies.rectangle(200, 500, 100, 100, {
           collisionFilter: {
             //group: group
           },
-          //isSensor: true,
+          id: "302",
           inertia: Infinity,
           render: {
             fillStyle: "transparent",
-            strokeStyle: "azure",
-            lineWidth: 0.5
+            strokeStyle: "darkred",
+            lineWidth: 8
           }
         }),
 
@@ -179,12 +187,12 @@ export default {
           collisionFilter: {
             //group: group
           },
-          //isSensor: true,
+          id: "303",
           inertia: Infinity,
           render: {
             fillStyle: "transparent",
-            strokeStyle: "azure",
-            lineWidth: 0.5
+            strokeStyle: "lightcoral",
+            lineWidth: 8
           }
         }),
         // walls
@@ -225,6 +233,36 @@ export default {
           isStatic: true
         })
       ]);
+    },
+    test(){
+      Events.on(this.engine, "collisionStart", function(event) {
+      var pairs = event.pairs;
+        let a = pairs[0].bodyA;
+        let b = pairs[0].bodyB;
+       
+      if(a.id=="301" && a.render.fillStyle=="olive" || b.id=="301" && b.render.fillStyle=="olive"){
+        success = 1;
+      }
+      if(a.id=="302" && a.render.fillStyle=="darkred" || b.id=="302" && b.render.fillStyle=="darkred"){
+         success1 = 1;
+      }
+      if(a.id=="303" && a.render.fillStyle=="lightcoral" || b.id=="303" && b.render.fillStyle=="lightcoral" ){
+         success2 = 1;
+      }
+      if(success==1 && success1==1 && success2==1){
+        SweetAlert.fire({
+        title: "Sehr gut!",
+        icon: "success",
+        confirmButtonText: "Zum nächsten Level",
+        cancelButtonText: "Abbrechen",
+        showCancelButton: true
+        });
+        //if () {
+        //this.$router.push("/games/colors/levels/2");
+      //}
+      }
+      
+      });
     },
     setupMouse() {
       var mouse = Mouse.create(this.render.canvas),
