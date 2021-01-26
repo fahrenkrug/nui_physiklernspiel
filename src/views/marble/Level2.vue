@@ -9,11 +9,13 @@
           <v-btn @click="addMarble()">Add Marble</v-btn>
         </v-col>
       </v-row>
-       <v-row>
-      <v-col cols="20"
-        >Positioniere die bunten Balken so, dass wenn der Flummi aus dem oberen Korb fällt, dieser in den Korb unten links springt. Füge den Flummi durch Klick auf den Button "Flummi hinzufügen" hinzu.</v-col
-      >
-    </v-row>
+      <v-row>
+        <v-col cols="20"
+          >Positioniere die bunten Balken so, dass wenn der Flummi aus dem
+          oberen Korb fällt, dieser in den Korb unten links springt. Füge den
+          Flummi durch Klick auf den Button "Flummi hinzufügen" hinzu.</v-col
+        >
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -30,17 +32,18 @@ import {
   Bodies,
   Body,
   //Vector,
-  Events
+  Events,
 } from "matter-js";
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
+import { GAME_IDENTIFIER } from "@/store/modules/game";
 //import Keypress from "vue-keypress";
 //import func from "../../vue-temp/vue-editor-bridge";
 
 const render = {
   fillStyle: "#000",
   strokeStyle: "rgb(49,51,53)",
-  lineWidth: 3
+  lineWidth: 3,
 };
 
 export default {
@@ -59,7 +62,7 @@ export default {
       mass: 0.1,
       mouseConstraint: null,
       bodySelected: null,
-      balkCategory: 0x0002
+      balkCategory: 0x0002,
     };
   },
   computed: {
@@ -71,7 +74,7 @@ export default {
     },
     minMass() {
       return 1;
-    }
+    },
   },
   mounted() {
     this.setup();
@@ -96,8 +99,8 @@ export default {
         options: {
           width: window.screen.availWidth - 20,
           height: window.screen.availHeight - 310,
-          wireframes: false
-        }
+          wireframes: false,
+        },
       });
       Render.run(this.render);
       this.runner = Runner.create();
@@ -127,11 +130,11 @@ export default {
                 randomBetween(50, 200) +
                 "," +
                 randomBetween(50, 200) +
-                ")"
+                ")",
             },
             collisionFilter: {
-              category: this.balkCategory
-            }
+              category: this.balkCategory,
+            },
           })
         );
 
@@ -154,8 +157,8 @@ export default {
         {
           isStatic: true,
           render: {
-            fillStyle: "rgb(" + r + "," + g + "," + b + ")"
-          }
+            fillStyle: "rgb(" + r + "," + g + "," + b + ")",
+          },
         }
       );
 
@@ -204,8 +207,8 @@ export default {
           {
             isStatic: true,
             render: {
-              fillStyle: "rgb(" + r + "," + g + "," + b + ")"
-            }
+              fillStyle: "rgb(" + r + "," + g + "," + b + ")",
+            },
           }
         ),
         Bodies.rectangle(
@@ -216,11 +219,11 @@ export default {
           {
             isStatic: true,
             render: {
-              fillStyle: "rgb(" + r + "," + g + "," + b + ")"
-            }
+              fillStyle: "rgb(" + r + "," + g + "," + b + ")",
+            },
           }
         ),
-        this.bucket
+        this.bucket,
       ]);
     },
     setupMouse() {
@@ -229,15 +232,15 @@ export default {
       this.mouseConstraint = MouseConstraint.create(this.engine, {
         mouse: this.mouse,
         collisionFilter: {
-          mask: this.balkCategory
-        }
+          mask: this.balkCategory,
+        },
       });
       World.add(this.world, this.mouseConstraint);
 
       //var draggablesArray = this.draggables;
       var constraint = this.mouseConstraint;
 
-      Events.on(this.mouseConstraint, "mousedown", function(event) {
+      Events.on(this.mouseConstraint, "mousedown", function (event) {
         console.log(event);
 
         let element;
@@ -261,14 +264,14 @@ export default {
 
           Body.setPosition(element, {
             x: x,
-            y: y
+            y: y,
           });
 
           this.bodySelected = element;
         }
       });
 
-      Events.on(this.mouseConstraint, "mousemove", function(event) {
+      Events.on(this.mouseConstraint, "mousemove", function (event) {
         if (this.bodySelected == null) {
           return;
         }
@@ -281,11 +284,11 @@ export default {
 
         Body.setPosition(element, {
           x: x,
-          y: y
+          y: y,
         });
       });
 
-      Events.on(this.mouseConstraint, "mouseup", function(event) {
+      Events.on(this.mouseConstraint, "mouseup", function (event) {
         console.log(event);
         this.bodySelected = null;
       });
@@ -329,13 +332,16 @@ export default {
       this.collisionReject(new Error("Collision was just temporary."));
     },
     async onGoalCollision() {
-      await this.$store.dispatch("level/didAchieveLevel", { number: 2 });
       const { isConfirmed } = await SweetAlert.fire({
         title: "Sehr gut!",
         icon: "success",
         confirmButtonText: "Zum nächsten Level",
         cancelButtonText: "Abbrechen",
-        showCancelButton: true
+        showCancelButton: true,
+      });
+      await this.$store.dispatch("level/didAchieveLevel", {
+        number: 2,
+        gameIdentifier: GAME_IDENTIFIER.COLORS,
       });
       if (isConfirmed) {
         await this.$router.push("/games/marble/levels/3");
@@ -356,15 +362,15 @@ export default {
         inertia: Infinity,
         restitution: 0.9,
         render: {
-          fillStyle: "rgb(" + r + "," + g + "," + b + ")"
-        }
+          fillStyle: "rgb(" + r + "," + g + "," + b + ")",
+        },
       });
 
       World.add(this.world, this.marble);
 
       this.bucket.render.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
-    }
-  }
+    },
+  },
 };
 </script>
 

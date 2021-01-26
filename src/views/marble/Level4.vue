@@ -35,6 +35,7 @@ import {
 } from "matter-js";
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
+//import { GAME_IDENTIFIER } from "@/store/modules/game";
 //import Keypress from "vue-keypress";
 //import func from "../../vue-temp/vue-editor-bridge";
 
