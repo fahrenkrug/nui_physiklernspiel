@@ -39,11 +39,6 @@ export default {
             engine: null,
             render: null,
             runner: null,
-            target: null,
-            jumpingBox: null,
-            circle: null,
-            circleCategory: 0x0002,
-            collisionReject: null,
             mass: 400,
             ball: null,
             sling: null,
@@ -51,7 +46,6 @@ export default {
             firing: false,
             hits: null,
             compoundBodyA: null,
-            compoundBodyB: null
         };
     },
     computed: {
@@ -99,33 +93,20 @@ export default {
 
         setupWorld() {
             // add bodies
-            const target = Bodies.rectangle(610, 250, 100, 20, {
+            var target = Bodies.rectangle(610, 250, 100, 20, {
+                isStatic: true,
+                id: 3,
+            });
+            var target_v = Bodies.rectangle(660, 235, 20, 50, {
                 isStatic: true,
             });
-            const target_v = Bodies.rectangle(660, 235, 20, 50, {
-                isStatic: true,
-            });
-            const target_v2 = Bodies.rectangle(560, 235, 20, 50, {
-                isStatic: true,
-            });
-            const target_2 = Bodies.rectangle(810, 100, 100, 20, {
-                isStatic: true,
-            });
-            const target_2v = Bodies.rectangle(860, 85, 20, 50, {
-                isStatic: true,
-            });
-            const target_2v2 = Bodies.rectangle(760, 85, 20, 50, {
+            var target_v2 = Bodies.rectangle(560, 235, 20, 50, {
                 isStatic: true,
             });
             this.compoundBodyA = Body.create({
                 parts: [target, target_v, target_v2],
                 isStatic: true,
                 id: 3,
-            });
-            this.compoundBodyB = Body.create({
-                parts: [target_2, target_2v, target_2v2],
-                isStatic: true,
-                id: 4,
             });
             this.ball = Bodies.rectangle(70, 450, 20, 20, {
                 mass: 400,
@@ -143,7 +124,6 @@ export default {
             });
             World.add(this.world, [
                 this.compoundBodyA,
-                this.compoundBodyB,
                 this.ball,
                 this.sling
             ]);
@@ -214,18 +194,8 @@ export default {
         },
         isGoalPair(pair) {
             if ((pair.bodyA.id === this.ball.id && pair.bodyB.id === this.compoundBodyA.id) || (pair.bodyB.id === this.ball.id && pair.bodyA.id === this.compoundBodyA.id)) {
-                console.log("hit registered");
-                this.hits++;
-            }
-            if ((pair.bodyA.id === this.ball.id && pair.bodyB.id === this.compoundBodyB.id) ||
-                (pair.bodyB.id === this.ball.id && pair.bodyA.id === this.compoundBodyB.id)) {
-                console.log("hit registered");
-                this.hits++;
-            }
-            if (this.hits == 2) {
-            return (
-                true
-            );
+                console.log("hit registered A");
+                return true;
             }
         },
         waitIfCollisionStays() {
@@ -250,7 +220,7 @@ export default {
         },
         async onGoalCollision() {
             await this.$store.dispatch("level/didAchieveLevel", {
-                number: 2,
+                number: 1,
                 gameIdentifier: GAME_IDENTIFIER.CATAPULT
             });
             const {
