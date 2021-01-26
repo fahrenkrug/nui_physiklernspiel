@@ -50,6 +50,8 @@ export default {
             mouseConstraint: null,
             firing: false,
             hits: null,
+            compoundBodyA: null,
+            compoundBodyB: null
         };
     },
     computed: {
@@ -115,13 +117,15 @@ export default {
             const target_2v2 = Bodies.rectangle(760, 85, 20, 50, {
                 isStatic: true,
             });
-            var compoundBodyA = Body.create({
+            this.compoundBodyA = Body.create({
                 parts: [target, target_v, target_v2],
                 isStatic: true,
+                id: 3,
             });
-            var compoundBodyB = Body.create({
+            this.compoundBodyB = Body.create({
                 parts: [target_2, target_2v, target_2v2],
                 isStatic: true,
+                id: 4,
             });
             this.ball = Bodies.rectangle(70, 450, 20, 20, {
                 mass: 400,
@@ -138,14 +142,15 @@ export default {
                 stiffness: 0.03
             });
             World.add(this.world, [
-                compoundBodyA,
-                compoundBodyB,
+                this.compoundBodyA,
+                this.compoundBodyB,
                 this.ball,
                 this.sling
             ]);
 
         },
         slingShot(ball, sling, firing) {
+            //console.log(ball);
             Events.on(this.mouseConstraint, 'enddrag', function (e) {
                 if (e.Body === this.ball) {
                     firing = true;
@@ -153,6 +158,7 @@ export default {
             });
             Events.on(this.engine, 'afterUpdate', function () {
                 if (firing && Math.abs(ball.position.x - 70) < 20 && Math.abs(ball.position.y - 450) < 20) {
+                    this.ball = ball;
                     ball = Bodies.rectangle(70, 450, 20, 20, {
                         mass: 400,
                         friction: 1,
@@ -160,7 +166,8 @@ export default {
                         id: 1,
                     });
                     World.add(this.world, ball);
-                    sling.bodyB = ball;
+                    sling.bodyB = ball;     
+                    this.slingShot = sling;
                     firing = false;
                 }
             });
@@ -199,29 +206,27 @@ export default {
                 }
                 try {
                     await this.waitIfCollisionStays();
-                    this.hits++;
-                    console.log(this.hits);
-                    if (this.hits == 2) {
-                        await this.onGoalCollision();
-                    }
+                    await this.onGoalCollision();
                 } catch (e) {
                     console.log(e);
                 }
             });
         },
         isGoalPair(pair) {
-            if ((pair.bodyA === this.ball && pair.bodyB === this.compoundBodyA) ||
-                (pair.bodyB === this.ball && pair.bodyA === this.compoundBodyA)) {
+            if ((pair.bodyA.id === this.ball.id && pair.bodyB.id === this.compoundBodyA.id) || (pair.bodyB.id === this.ball.id && pair.bodyA.id === this.compoundBodyA.id)) {
                 console.log("hit registered");
+                this.hits++;
             }
-            if ((pair.bodyA === this.ball && pair.bodyB === this.compoundBodyB) ||
-                (pair.bodyB === this.ball && pair.bodyA === this.compoundBodyB)) {
+            if ((pair.bodyA.id === this.ball.id && pair.bodyB.id === this.compoundBodyB.id) ||
+                (pair.bodyB.id === this.ball.id && pair.bodyA.id === this.compoundBodyB.id)) {
                 console.log("hit registered");
+                this.hits++;
             }
-            console.log(pair);
+            if (this.hits == 2) {
             return (
                 true
             );
+            }
         },
         waitIfCollisionStays() {
             return new Promise((resolve, reject) => {
