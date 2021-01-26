@@ -9,6 +9,11 @@
           <v-btn @click="addMarble()">Add Marble</v-btn>
         </v-col>
       </v-row>
+       <v-row>
+      <v-col cols="20"
+        >Positioniere die bunten Balken so, dass wenn der Flummi aus dem oberen Korb fällt, dieser in den Korb unten links springt. Füge den Flummi durch Klick auf den Button "Flummi hinzufügen" hinzu.</v-col
+      >
+    </v-row>
     </v-container>
   </div>
 </template>
@@ -456,7 +461,7 @@ export default {
         showCancelButton: true
       });
       if (isConfirmed) {
-        await this.$router.push("/levels/4");
+        await this.$router.push("/games/marble/levels/4");
       }
     },
 
