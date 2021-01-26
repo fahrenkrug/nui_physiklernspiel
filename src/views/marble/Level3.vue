@@ -208,7 +208,7 @@ export default {
       Body.rotate(d, 0.65);
       this.draggables.push(d);
 
-      d = Bodies.rectangle(700, 600, 300, 20, {
+      d = Bodies.rectangle(500, 300, 300, 20, {
         isStatic: true,
         label: "draggable",
         id: "302",
@@ -228,7 +228,7 @@ export default {
       });
       this.draggables.push(d);
 
-      d = Bodies.rectangle(150, 600, 200, 20, {
+      d = Bodies.rectangle(150, 300, 200, 20, {
         isStatic: true,
         label: "draggable",
         id: "303",
@@ -249,7 +249,7 @@ export default {
 
       this.draggables.push(d);
 
-      d = Bodies.rectangle(150, 640, 200, 20, {
+      d = Bodies.rectangle(150, 380, 200, 20, {
         isStatic: true,
         restitution: 1,
         friction: 0,

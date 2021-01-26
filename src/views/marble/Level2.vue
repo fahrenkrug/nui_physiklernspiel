@@ -114,11 +114,11 @@ export default {
       const b = randomBetween(50, 200);
 
       //balks
-      var y = 300;
+      var y = 150;
       var a = 0.4;
       for (var i = 0; i < 4; i++) {
         this.balks.push(
-          Bodies.rectangle(200, y, 300, 20, {
+          Bodies.rectangle(250, y, 300, 20, {
             isStatic: true,
             id: "30" + 1,
             angle: a,
@@ -138,7 +138,7 @@ export default {
           })
         );
 
-        y = y + 100;
+        y = y + 80;
 
         if (a != 0) {
           a = 0;
