@@ -6,9 +6,14 @@
       <v-row>
         <v-col cols="4"></v-col>
         <v-col>
-          <v-btn @click="addMarble()">Add Marble</v-btn>
+          <v-btn @click="addMarble()">Flummi hinzufügen</v-btn>
         </v-col>
       </v-row>
+        <v-row>
+      <v-col cols="20"
+        >Positioniere die bunten Balken so, dass wenn der Flummi aus dem oberen Korb fällt, dieser in den Korb unten links springt. Füge den Flummi durch Klick auf den Button "Flummi hinzufügen" hinzu.</v-col
+      >
+    </v-row>
     </v-container>
   </div>
 </template>
@@ -29,6 +34,7 @@ import {
 } from "matter-js";
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
+import { GAME_IDENTIFIER } from "@/store/modules/game";
 //import Keypress from "vue-keypress";
 //import func from "../../vue-temp/vue-editor-bridge";
 
@@ -106,7 +112,7 @@ export default {
       const b = randomBetween(50, 200);
 
       //balks
-      var y = 300;
+      var y = 270;
       var a = 0.4;
       for (var i = 0; i < 4; i++) {
         this.balks.push(
@@ -140,7 +146,7 @@ export default {
       }
 
       this.balks.push(
-        Bodies.rectangle(450, 400, 300, 20, {
+        Bodies.rectangle(500, 300, 300, 20, {
           isStatic: true,
           id: "304",
           angle: -0.5,
@@ -346,16 +352,19 @@ export default {
       this.collisionReject(new Error("Collision was just temporary."));
     },
     async onGoalCollision() {
-      await this.$store.dispatch("level/didAchieveLevel", { number: 2 });
-      const { isConfirmed } = await SweetAlert.fire({
+     const { isConfirmed } = await SweetAlert.fire({
         title: "Sehr gut!",
         icon: "success",
         confirmButtonText: "Zum nächsten Level",
         cancelButtonText: "Abbrechen",
-        showCancelButton: true
+        showCancelButton: true,
+      });
+      await this.$store.dispatch("level/didAchieveLevel", {
+        number: 2,
+        gameIdentifier: GAME_IDENTIFIER.MARBLE,
       });
       if (isConfirmed) {
-        await this.$router.push("/levels/2");
+        await this.$router.push("/games/marble/levels/2");
       }
     },
 

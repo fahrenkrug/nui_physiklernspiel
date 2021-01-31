@@ -9,6 +9,11 @@
           <v-btn @click="addMarble()">Add Marble</v-btn>
         </v-col>
       </v-row>
+       <v-row>
+      <v-col cols="20"
+        >Positioniere die bunten Balken so, dass wenn der Flummi aus dem oberen Korb fällt, dieser in den Korb unten links springt. Füge den Flummi durch Klick auf den Button "Flummi hinzufügen" hinzu.</v-col
+      >
+    </v-row>
     </v-container>
   </div>
 </template>
@@ -30,6 +35,7 @@ import {
 } from "matter-js";
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
+//import { GAME_IDENTIFIER } from "@/store/modules/game";
 //import Keypress from "vue-keypress";
 //import func from "../../vue-temp/vue-editor-bridge";
 
