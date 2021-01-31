@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <level-navigation />
-    <div id="matterJsElement"></div>
+    <div id="matterJsElement" ref="matterDiv"></div>
     <v-row>
       <v-col cols="4">Masse: {{ mass }}</v-col>
       <v-col>
@@ -74,6 +74,7 @@ export default {
       this.setupWorld();
       this.setupMouse();
       this.listenForCollisionEvents();
+      this.registerTouchEvents();
     },
     setupEngine() {
       this.engine = Engine.create();
@@ -207,6 +208,12 @@ export default {
       if (isConfirmed) {
         await this.$router.push("/games/catapult/levels/2");
       }
+    },
+    registerTouchEvents() {
+      const canvas = document.getElementsByTagName("canvas");
+      console.log(canvas);
+      alert(JSON.stringify(canvas));
+      canvas.addEventListener("touchststart", () => console.log("touchstart"));
     }
   }
 };
