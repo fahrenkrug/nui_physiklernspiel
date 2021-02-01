@@ -77,6 +77,7 @@ export const catapultLevelMixin = {
       this.setupWorld();
       this.setupMouse();
       this.listenForCollisionEvents();
+      this.registerTouchEvents();
     },
     setupEngine() {
       this.engine = Engine.create();
@@ -153,6 +154,9 @@ export const catapultLevelMixin = {
         return;
       }
       this.collisionReject(new Error("Collision was just temporary."));
+    },
+    registerTouchEvents() {
+      console.log("registering touch events");
     }
   }
 };
