@@ -177,7 +177,7 @@ export const level = {
     SET_LEVEL_ACCESS: (state, { number: levelNumber, gameIdentifier }) => {
       const findExpression = createFindExpression(levelNumber, gameIdentifier);
       const index = state.levels.findIndex(findExpression);
-      if (!index < 0) {
+      if (index < 0) {
         return;
       }
       const level = state.levels[index];

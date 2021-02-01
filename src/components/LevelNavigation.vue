@@ -17,7 +17,11 @@
       </v-btn>
     </v-col>
     <v-col cols="3">
-      <v-btn @click="onNextLevel" :disabled="!hasNextLevel">
+      <v-btn
+        @click="onNextLevel"
+        v-if="hasNextLevel"
+        :disabled="!canAccessNextLevel"
+      >
         <v-icon>mdi-next</v-icon>
         Level {{ nextLevelNumber }}
       </v-btn>
@@ -53,11 +57,16 @@ export default {
     hasPreviousLevel() {
       return this.previousLevelNumber > 0;
     },
-    hasNextLevel() {
-      const level = this.levelsForGame.find(
+    nextLevel() {
+      return this.levelsForGame.find(
         ({ number }) => number === this.nextLevelNumber
       );
-      return level ? level.canBeAccessed : false;
+    },
+    hasNextLevel() {
+      return !!this.nextLevel;
+    },
+    canAccessNextLevel() {
+      return this.nextLevel ? this.nextLevel.canBeAccessed : false;
     },
     ...mapState("level", ["levels"])
   },

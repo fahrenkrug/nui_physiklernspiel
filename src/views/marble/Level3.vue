@@ -9,6 +9,11 @@
           <v-btn @click="addMarble()">Add Marble</v-btn>
         </v-col>
       </v-row>
+       <v-row>
+      <v-col cols="20"
+        >Positioniere die bunten Balken so, dass wenn der Flummi aus dem oberen Korb fällt, dieser in den Korb unten links springt. Füge den Flummi durch Klick auf den Button "Flummi hinzufügen" hinzu.</v-col
+      >
+    </v-row>
     </v-container>
   </div>
 </template>
@@ -30,6 +35,7 @@ import {
 } from "matter-js";
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
+import { GAME_IDENTIFIER } from "@/store/modules/game";
 //import Keypress from "vue-keypress";
 //import func from "../../vue-temp/vue-editor-bridge";
 
@@ -202,7 +208,7 @@ export default {
       Body.rotate(d, 0.65);
       this.draggables.push(d);
 
-      d = Bodies.rectangle(700, 600, 300, 20, {
+      d = Bodies.rectangle(500, 300, 300, 20, {
         isStatic: true,
         label: "draggable",
         id: "302",
@@ -222,7 +228,7 @@ export default {
       });
       this.draggables.push(d);
 
-      d = Bodies.rectangle(150, 600, 200, 20, {
+      d = Bodies.rectangle(150, 300, 200, 20, {
         isStatic: true,
         label: "draggable",
         id: "303",
@@ -243,7 +249,7 @@ export default {
 
       this.draggables.push(d);
 
-      d = Bodies.rectangle(150, 640, 200, 20, {
+      d = Bodies.rectangle(150, 380, 200, 20, {
         isStatic: true,
         restitution: 1,
         friction: 0,
@@ -447,16 +453,19 @@ export default {
       this.collisionReject(new Error("Collision was just temporary."));
     },
     async onGoalCollision() {
-      await this.$store.dispatch("level/didAchieveLevel", { number: 3 });
       const { isConfirmed } = await SweetAlert.fire({
         title: "Sehr gut!",
         icon: "success",
         confirmButtonText: "Zum nächsten Level",
         cancelButtonText: "Abbrechen",
-        showCancelButton: true
+        showCancelButton: true,
+      });
+      await this.$store.dispatch("level/didAchieveLevel", {
+        number: 2,
+        gameIdentifier: GAME_IDENTIFIER.MARBLE,
       });
       if (isConfirmed) {
-        await this.$router.push("/levels/4");
+        await this.$router.push("/games/marble/levels/4");
       }
     },
 
