@@ -9,6 +9,9 @@ import {
   World
 } from "matter-js";
 
+import { Touches } from "@/utils/Touches";
+import { TouchConstraint } from "@/utils/TouchConstraints";
+
 export const catapultLevelMixin = {
   mounted() {
     this.setup();
@@ -76,8 +79,12 @@ export const catapultLevelMixin = {
       this.setupEngine();
       this.setupWorld();
       this.setupMouse();
+      // this.setupTouches();
       this.listenForCollisionEvents();
-      this.registerTouchEvents();
+      // this.registerTouchEvents();
+      setTimeout(() => {
+        this.registerResizeEvent();
+      }, 500);
     },
     setupEngine() {
       this.engine = Engine.create();
@@ -100,7 +107,28 @@ export const catapultLevelMixin = {
     setupMouse() {
       const mouse = Mouse.create(this.render.canvas);
       const mouseConstraint = MouseConstraint.create(this.engine, {
-        mouse: mouse,
+        mouse,
+        constraint: {
+          stiffness: 0.2,
+          render: {
+            visible: false
+          }
+        },
+        collisionFilter: {
+          mask: this.circleCategory
+        }
+      });
+      World.add(this.world, mouseConstraint);
+      this.render.mouse = mouse;
+      Render.lookAt(this.render, {
+        min: { x: 0, y: 0 },
+        max: { x: 800, y: 600 }
+      });
+    },
+    setupTouches() {
+      const mouse = Touches.create(this.render.canvas);
+      const mouseConstraint = TouchConstraint.create(this.engine, {
+        mouse,
         constraint: {
           stiffness: 0.2,
           render: {

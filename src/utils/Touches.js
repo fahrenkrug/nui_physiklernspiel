@@ -1,26 +1,9 @@
-/**
- * The `Matter.Touches` module contains methods for creating and manipulating mouse inputs.
- *
- * @class Touches
- */
-
-let Touches = {};
-
-module.exports = Touches;
-
 import { Common } from "matter-js";
-
-(function() {
-  /**
-   * Creates a mouse input.
-   * @method create
-   * @param {HTMLElement} element
-   * @return {mouse} A new mouse
-   */
-  Touches.create = function(element) {
+export class Touches {
+  static create(element) {
     let touches = {};
 
-    let numberOfTouches = [];
+    // let numberOfTouches = [];
 
     if (!element) {
       Common.log(
@@ -48,6 +31,7 @@ import { Common } from "matter-js";
     };
 
     touches.mousemove = function(event) {
+      console.log("move");
       let position = Touches._getRelativeMousePosition(
           event,
           touches.element,
@@ -70,12 +54,16 @@ import { Common } from "matter-js";
     };
 
     touches.mousedown = function(event) {
+      console.log("mousedonw");
       let position = Touches._getRelativeMousePosition(
           event,
           touches.element,
           touches.pixelRatio
         ),
         touches = event.changedTouches;
+
+      console.log("changed");
+      console.log(event.changedTouches);
 
       if (touches) {
         touches.button = 0;
@@ -127,18 +115,10 @@ import { Common } from "matter-js";
       event.preventDefault();
     };
 
-    Touches.setElement(touches, touches.element);
+    return Touches.setElement(touches, touches.element);
+  }
 
-    return touches;
-  };
-
-  /**
-   * Sets the element the touches is bound to (and relative to).
-   * @method setElement
-   * @param {touches} touches
-   * @param {HTMLElement} element
-   */
-  Touches.setElement = function(touches, element) {
+  static setElement(touches, element) {
     touches.element = element;
 
     element.addEventListener("mousemove", touches.mousemove);
@@ -151,14 +131,10 @@ import { Common } from "matter-js";
     element.addEventListener("touchmove", touches.mousemove);
     element.addEventListener("touchstart", touches.mousedown);
     element.addEventListener("touchend", touches.mouseup);
-  };
+    return touches;
+  }
 
-  /**
-   * Clears all captured source events.
-   * @method clearSourceEvents
-   * @param {mouse} touches
-   */
-  Touches.clearSourceEvents = function(touches) {
+  static clearSourceEvents = function(touches) {
     touches.sourceEvents.mousemove = null;
     touches.sourceEvents.mousedown = null;
     touches.sourceEvents.mouseup = null;
@@ -166,13 +142,7 @@ import { Common } from "matter-js";
     touches.wheelDelta = 0;
   };
 
-  /**
-   * Sets the touches position offset.
-   * @method setOffset
-   * @param {touches} touches
-   * @param {vector} offset
-   */
-  Touches.setOffset = function(touches, offset) {
+  static setOffset = function(touches, offset) {
     touches.offset.x = offset.x;
     touches.offset.y = offset.y;
     touches.position.x =
@@ -181,13 +151,7 @@ import { Common } from "matter-js";
       touches.absolute.y * touches.scale.y + touches.offset.y;
   };
 
-  /**
-   * Sets the touches position scale.
-   * @method setScale
-   * @param {touches} touches
-   * @param {vector} scale
-   */
-  Touches.setScale = function(touches, scale) {
+  static setScale = function(touches, scale) {
     touches.scale.x = scale.x;
     touches.scale.y = scale.y;
     touches.position.x =
@@ -196,16 +160,7 @@ import { Common } from "matter-js";
       touches.absolute.y * touches.scale.y + touches.offset.y;
   };
 
-  /**
-   * Gets the mouse position relative to an element given a screen pixel ratio.
-   * @method _getRelativeMousePosition
-   * @private
-   * @param {} event
-   * @param {} element
-   * @param {number} pixelRatio
-   * @return {}
-   */
-  Touches._getRelativeMousePosition = function(event, element, pixelRatio) {
+  static _getRelativeMousePosition = function(event, element, pixelRatio) {
     var elementBounds = element.getBoundingClientRect(),
       rootNode =
         document.documentElement || document.body.parentNode || document.body,
@@ -240,4 +195,4 @@ import { Common } from "matter-js";
           pixelRatio)
     };
   };
-})();
+}
