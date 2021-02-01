@@ -42,7 +42,7 @@ export default {
           category: this.circleCategory
         }
       });
-      this.target = Bodies.rectangle(440, 200, 40, 14, {
+      this.target = Bodies.rectangle(480, 200, 120, 14, {
         isStatic: true,
         render: this.targetRenderStyle
       });
