@@ -146,7 +146,7 @@ export default {
                         id: 1,
                     });
                     World.add(this.world, ball);
-                    sling.bodyB = ball;     
+                    sling.bodyB = ball;
                     this.slingShot = sling;
                     firing = false;
                 }
