@@ -1,14 +1,17 @@
 <template>
-  <v-container>
-    <level-navigation />
-    <div id="matterJsElement"></div>
-    <v-row>
+<div>
+    <v-container :fluid="true">
+        <level-navigation />
+        <div id="matterJsElement"></div>
+        <v-row>
       <v-col cols="20"
         >Farbenspiel: Berühre zwei Quadrate und färbe die transparenten Quadrate
-        so in der gewünschten Farbe. Mit dem transparenten Quadrat entfärbst du sie wieder.</v-col
+        so in der Farbe in der ihre Umrandungen sind. Mit dem transparenten
+        Quadrat entfärbst du sie wieder.</v-col
       >
     </v-row>
-  </v-container>
+    </v-container>
+</div>
 </template>
 
 <script>
@@ -24,8 +27,12 @@ import {
   Events
 } from "matter-js";
 import LevelNavigation from "@/components/LevelNavigation";
+import {
+    resizeMixin
+} from "@/mixins/resizeMixin";
 export default {
   name: "Level2",
+  mixins: [resizeMixin],
   components: { LevelNavigation },
   data() {
     return {
@@ -53,6 +60,7 @@ export default {
       this.setupWorld();
       this.setupMouse();
       this.listenForCollisionEvents();
+      this.registerResizeEvent();
     },
     setupEngine() {
       this.engine = Engine.create();
@@ -63,8 +71,8 @@ export default {
         showCollisions: true,
         showVelocity: true,
         options: {
-          width: window.screen.availWidth - 20,
-          height: window.screen.availHeight - 310,
+          width: window.innerWidth,
+          height: window.innerHeight,
           background: "dimgrey",
           wireframes: false
         }
@@ -189,44 +197,44 @@ export default {
           }
         }),
         // walls
-        Bodies.rectangle(220, 600, 1600, 50, {
-          collisionFilter: {
-            //group: group2
-          },
-          render: {
-            fillStyle: "azure"
-          },
-          isStatic: true
-        }),
-        Bodies.rectangle(-550, 100, 50, 1000, {
-          collisionFilter: {
-            //group: group2
-          },
-          render: {
-            fillStyle: "azure"
-          },
-          isStatic: true
-        }),
-        Bodies.rectangle(970, 100, 50, 1000, {
-          collisionFilter: {
-            //group: group2
-          },
-          render: {
-            fillStyle: "azure"
-          },
-          isStatic: true
-        }),
-        Bodies.rectangle(220, 0, 1600, 50, {
-          collisionFilter: {
-            //group: group2
-          },
-          render: {
-            fillStyle: "azure"
-          },
-          isStatic: true
-        })
-      ]);
-    },
+                Bodies.rectangle(220, 600, 1600, 50, {
+                    collisionFilter: {
+                        //group: group2
+                    },
+                    render: {
+                        fillStyle: "azure"
+                    },
+                    isStatic: true
+                }),
+                Bodies.rectangle(-550, 100, 50, 1000, {
+                    collisionFilter: {
+                        //group: group2
+                    },
+                    render: {
+                        fillStyle: "azure"
+                    },
+                    isStatic: true
+                }),
+                Bodies.rectangle(970, 100, 50, 1000, {
+                    collisionFilter: {
+                        //group: group2
+                    },
+                    render: {
+                        fillStyle: "azure"
+                    },
+                    isStatic: true
+                }),
+                Bodies.rectangle(220, -200, 1600, 50, {
+                    collisionFilter: {
+                        //group: group2
+                    },
+                    render: {
+                        fillStyle: "azure"
+                    },
+                    isStatic: true
+                })
+            ]);
+        },
     setupMouse() {
       var mouse = Mouse.create(this.render.canvas),
         mouseConstraint = MouseConstraint.create(this.engine, {
@@ -245,9 +253,15 @@ export default {
 
       // fit the render viewport to the scene
       Render.lookAt(this.render, {
-        min: { x: 0, y: 0 },
-        max: { x: 800, y: 600 }
-      });
+                min: {
+                    x: -550,
+                    y: 0
+                },
+                max: {
+                    x: 970,
+                    y: 400
+                }
+            });
     },
 
     listenForCollisionEvents() {
@@ -359,4 +373,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+@media (min-width: 1200px){
+    .container{
+        max-width: 80%;
+    }
+}
+</style>
