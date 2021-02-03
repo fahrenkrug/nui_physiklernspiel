@@ -2,7 +2,11 @@
 <template>
 <v-container>
     <level-navigation />
-    <div id="matterJsElement"></div>
+    <div class="inline">
+        <div class="d-flex justify-content-center">
+            <div class="d-flex" id="matterJsElement"></div>
+        </div>
+    </div>
     <v-row>
         <v-col cols="4">Masse: {{ mass }}</v-col>
         <v-col> </v-col>
@@ -32,7 +36,7 @@ import {
 export default {
     name: "Level1",
     components: {
-        LevelNavigation
+        LevelNavigation,
     },
     data() {
         return {
@@ -46,18 +50,26 @@ export default {
             firing: false,
             hits: null,
             compoundBodyA: null,
+            doit: 0,
+            timer: null,
         };
     },
     computed: {
         world() {
             return this.engine.world;
-        }
+        },
     },
     mounted() {
         this.setup();
     },
     beforeUpdate() {
         Body.setMass(this.ball, this.mass);
+    },
+    created() {
+        window.addEventListener("resize", this.myEventHandler);
+    },
+    destroyed() {
+        window.removeEventListener("resize", this.myEventHandler);
     },
     methods: {
         setup() {
@@ -67,7 +79,11 @@ export default {
             this.slingShot(this.ball, this.sling, this.firing);
             this.listenForCollisionEvents();
         },
-
+        myEventHandler() {
+            console.log(this.timer);
+            clearTimeout(this.timer);
+            this.timer = setTimeout(()=>{ this.setup(); }, 100);          
+        },
         setupEngine() {
             this.engine = Engine.create();
             this.render = Render.create({
@@ -78,13 +94,13 @@ export default {
                 showVelocity: true,
                 gravity: {
                     x: 0,
-                    y: 1
+                    y: 1,
                 },
                 options: {
-                    width: window.screen.availWidth - 20,
-                    height: window.screen.availHeight - 310,
-                    wireframes: false
-                }
+                    width: window.innerWidth * 0.8,
+                    height: window.innerHeight * 0.8,
+                    wireframes: false,
+                },
             });
             Render.run(this.render);
             this.runner = Runner.create();
@@ -117,27 +133,26 @@ export default {
             this.sling = Constraint.create({
                 pointA: {
                     x: 70,
-                    y: 450
+                    y: 450,
                 },
                 bodyB: this.ball,
-                stiffness: 0.03
+                stiffness: 0.03,
             });
-            World.add(this.world, [
-                this.compoundBodyA,
-                this.ball,
-                this.sling
-            ]);
-
+            World.add(this.world, [this.compoundBodyA, this.ball, this.sling]);
         },
         slingShot(ball, sling, firing) {
             //console.log(ball);
-            Events.on(this.mouseConstraint, 'enddrag', function (e) {
+            Events.on(this.mouseConstraint, "enddrag", function (e) {
                 if (e.Body === this.ball) {
                     firing = true;
-                };
+                }
             });
-            Events.on(this.engine, 'afterUpdate', function () {
-                if (firing && Math.abs(ball.position.x - 70) < 20 && Math.abs(ball.position.y - 450) < 20) {
+            Events.on(this.engine, "afterUpdate", function () {
+                if (
+                    firing &&
+                    Math.abs(ball.position.x - 70) < 20 &&
+                    Math.abs(ball.position.y - 450) < 20
+                ) {
                     this.ball = ball;
                     ball = Bodies.rectangle(70, 450, 20, 20, {
                         mass: 400,
@@ -159,8 +174,8 @@ export default {
                 constraint: {
                     stiffness: 0.2,
                     render: {
-                        visible: false
-                    }
+                        visible: false,
+                    },
                 },
             });
             World.add(this.world, this.mouseConstraint);
@@ -168,12 +183,12 @@ export default {
             Render.lookAt(this.render, {
                 min: {
                     x: 0,
-                    y: 0
+                    y: 0,
                 },
                 max: {
                     x: 800,
-                    y: 600
-                }
+                    y: 600,
+                },
             });
         },
         listenForCollisionEvents() {
@@ -193,7 +208,12 @@ export default {
             });
         },
         isGoalPair(pair) {
-            if ((pair.bodyA.id === this.ball.id && pair.bodyB.id === this.compoundBodyA.id) || (pair.bodyB.id === this.ball.id && pair.bodyA.id === this.compoundBodyA.id)) {
+            if (
+                (pair.bodyA.id === this.ball.id &&
+                    pair.bodyB.id === this.compoundBodyA.id) ||
+                (pair.bodyB.id === this.ball.id &&
+                    pair.bodyA.id === this.compoundBodyA.id)
+            ) {
                 console.log("hit registered A");
                 return true;
             }
@@ -221,7 +241,7 @@ export default {
         async onGoalCollision() {
             await this.$store.dispatch("level/didAchieveLevel", {
                 number: 1,
-                gameIdentifier: GAME_IDENTIFIER.CATAPULT
+                gameIdentifier: GAME_IDENTIFIER.CATAPULT,
             });
             const {
                 isConfirmed
@@ -230,14 +250,16 @@ export default {
                 icon: "success",
                 confirmButtonText: "Zum nächsten Level",
                 cancelButtonText: "Abbrechen",
-                showCancelButton: true
+                showCancelButton: true,
             });
             if (isConfirmed) {
                 await this.$router.push("/games/slingshot/levels/2");
             }
-        }
-    }
+        },
+    },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>
