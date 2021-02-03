@@ -1,17 +1,15 @@
 /* eslint-disable */
 <template>
-<v-container>
-    <level-navigation />
-    <div class="inline">
-        <div class="d-flex justify-content-center">
-            <div class="d-flex" id="matterJsElement"></div>
-        </div>
-    </div>
-    <v-row>
-        <v-col cols="4">Masse: {{ mass }}</v-col>
-        <v-col> </v-col>
-    </v-row>
-</v-container>
+<div>
+    <v-container :fluid="true">
+        <level-navigation />
+        <div id="matterJsElement"></div>
+        <v-row>
+            <v-col cols="4">Masse: {{ mass }}</v-col>
+            <v-col> </v-col>
+        </v-row>
+    </v-container>
+</div>
 </template>
 
 <script>
@@ -30,11 +28,15 @@ import {
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
 import {
+    resizeMixin
+} from "@/mixins/resizeMixin";
+import {
     GAME_IDENTIFIER
 } from "@/store/modules/game";
 
 export default {
     name: "Level1",
+    mixins: [resizeMixin],
     components: {
         LevelNavigation,
     },
@@ -50,8 +52,6 @@ export default {
             firing: false,
             hits: null,
             compoundBodyA: null,
-            doit: 0,
-            timer: null,
         };
     },
     computed: {
@@ -65,12 +65,6 @@ export default {
     beforeUpdate() {
         Body.setMass(this.ball, this.mass);
     },
-    created() {
-        window.addEventListener("resize", this.myEventHandler);
-    },
-    destroyed() {
-        window.removeEventListener("resize", this.myEventHandler);
-    },
     methods: {
         setup() {
             this.setupEngine();
@@ -78,15 +72,7 @@ export default {
             this.setupMouse();
             this.slingShot(this.ball, this.sling, this.firing);
             this.listenForCollisionEvents();
-        },
-        myEventHandler() {
-            console.log(this.timer);
-            clearTimeout(this.timer);
-            this.timer = setTimeout(() => {
-                this.render.canvas.remove();
-                this.setup();
-                console.log("resize");
-            }, 100);
+            this.registerResizeEvent();
         },
         setupEngine() {
             this.engine = Engine.create();
@@ -101,8 +87,8 @@ export default {
                     y: 1,
                 },
                 options: {
-                    width: window.innerWidth * 0.8,
-                    height: window.innerHeight * 0.8,
+                    width: window.innerWidth,
+                    height: window.innerHeight,
                     wireframes: false,
                 },
             });
@@ -265,5 +251,9 @@ export default {
 </script>
 
 <style scoped>
-
+@media (min-width: 1200px){
+    .container{
+        max-width: 80%;
+    }
+}
 </style>
