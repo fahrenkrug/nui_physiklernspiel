@@ -82,7 +82,11 @@ export default {
         myEventHandler() {
             console.log(this.timer);
             clearTimeout(this.timer);
-            this.timer = setTimeout(()=>{ this.setup(); }, 100);          
+            this.timer = setTimeout(() => {
+                this.render.canvas.remove();
+                this.setup();
+                console.log("resize");
+            }, 100);
         },
         setupEngine() {
             this.engine = Engine.create();
