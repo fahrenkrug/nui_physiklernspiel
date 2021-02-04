@@ -6,7 +6,7 @@
         <div id="matterJsElement"></div>
         <v-row>
             <v-col cols="4">Masse: {{ mass }}</v-col>
-            <v-col> </v-col>
+            <v-col>Nimm die Schleuder in die Hand und treffe das Ziel.</v-col>
         </v-row>
     </v-container>
 </div>
