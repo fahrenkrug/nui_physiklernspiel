@@ -11,7 +11,7 @@
         @click="$router.push('/')"
       />
 
-      <h3 class="mr-2 to-home" @click="$router.push('/')">Physikspiel</h3>
+      <h3 class="mr-2 to-home" @click="$router.push('/')">MyPhysics</h3>
     </div>
 
 
