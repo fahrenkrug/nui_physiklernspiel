@@ -25,8 +25,8 @@ export const game = {
       },
       {
         identifier: GAME_IDENTIFIER.MARBLE,
-        name: "Murmelbahn",
-        description: "Schaffst du es, dass die Murmeln das Ziel erreichen?",
+        name: "Flummibahn",
+        description: "Schaffst du es, dass die Flummis das Ziel erreichen?",
         image:
           "https://images.unsplash.com/photo-1519786632971-829b4ac6ecce?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1374&q=80"
       },
