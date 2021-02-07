@@ -18,7 +18,7 @@
       </v-col>
       <v-col>
         <v-card>
-          <v-img height="250" src="../assets/coop.jpg"></v-img>
+          <v-img height="250" src="../assets/versus.jpg"></v-img>
           <v-card-title> Versus-Modus </v-card-title>
 
           <v-card-subtitle>
