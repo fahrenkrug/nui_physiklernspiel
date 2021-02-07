@@ -88,7 +88,7 @@ export default {
                 },
                 options: {
                     width: window.innerWidth,
-                    height: window.innerHeight,
+                    height: window.innerHeight * 0.8,
                     wireframes: false,
                 },
             });
