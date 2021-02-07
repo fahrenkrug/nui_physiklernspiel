@@ -83,7 +83,7 @@ const levels = [
     number: 1,
     name: "Die Schleuder",
     description:
-      "Hier lernt man wirklich einiges. Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm.",
+      "Hier lernt man wirklich einiges. Nimm einen Block und schleuder diesen in das Ziel.",
     image:
       "https://images.unsplash.com/photo-1591306208574-969f12f1ebfe?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8cGh5c2ljc3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     achieved: false,
@@ -94,7 +94,7 @@ const levels = [
     number: 2,
     name: "Die Schleuder 2",
     description:
-      "Hier lernt man wirklich einiges. Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm.",
+      "Hier lernt man wirklich einiges. Nimm einen Block und schleuder diesen in das Ziel und damit es nicht zu einfach wird, das ganze mal zwei.",
     image:
       "https://images.unsplash.com/photo-1591306208574-969f12f1ebfe?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8cGh5c2ljc3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     achieved: false,
@@ -105,7 +105,7 @@ const levels = [
     number: 3,
     name: "Die Schleuder 3",
     description:
-      "Hier lernt man wirklich einiges. Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm.",
+      "Hier lernt man wirklich einiges. Nimm einen Block und schleuder diesen in das Ziel und damit es nicht zu einfach wird, das ganze mal drei.",
     image:
       "https://images.unsplash.com/photo-1591306208574-969f12f1ebfe?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8cGh5c2ljc3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
     achieved: false,

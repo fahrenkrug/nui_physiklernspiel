@@ -1,13 +1,15 @@
 /* eslint-disable */
 <template>
-<v-container>
-    <level-navigation />
-    <div id="matterJsElement"></div>
-    <v-row>
-        <v-col cols="4">Masse: {{ mass }}</v-col>
-        <v-col> </v-col>
-    </v-row>
-</v-container>
+<div>
+    <v-container :fluid="true">
+        <level-navigation />
+        <div id="matterJsElement"></div>
+        <v-row>
+            <v-col cols="4">Masse: {{ mass }}</v-col>
+            <v-col>Nimm die Schleuder in die Hand und triff die Ziele. </v-col>
+        </v-row>
+    </v-container>
+</div>
 </template>
 
 <script>
@@ -26,11 +28,15 @@ import {
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
 import {
+    resizeMixin
+} from "@/mixins/resizeMixin";
+import {
     GAME_IDENTIFIER
 } from "@/store/modules/game";
 
 export default {
     name: "Level3",
+    mixins: [resizeMixin],
     components: {
         LevelNavigation
     },
@@ -68,6 +74,7 @@ export default {
             this.setupMouse();
             this.slingShot(this.ball, this.sling, this.firing);
             this.listenForCollisionEvents();
+            this.registerResizeEvent();
         },
 
         setupEngine() {
@@ -291,4 +298,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+
+<style scoped>
+@media (min-width: 1200px){
+    .container{
+        max-width: 80%;
+    }
+}
+</style>

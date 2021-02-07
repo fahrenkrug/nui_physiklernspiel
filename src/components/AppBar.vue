@@ -14,7 +14,13 @@
       <h3 class="mr-2 to-home" @click="$router.push('/')">Physikspiel</h3>
     </div>
 
-    <v-spacer></v-spacer>
+
+<v-spacer></v-spacer>
+
+    <v-btn  to="/multiplayer" text>
+      <span class="mr-2">Multiplayer</span>
+      <v-icon>mdi-account</v-icon>  <v-icon>mdi-account</v-icon>
+    </v-btn>
 
     <v-btn to="/profile" text>
       <span class="mr-2">Account</span>

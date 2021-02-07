@@ -6,7 +6,7 @@
       <v-row>
         <v-col cols="4"></v-col>
         <v-col>
-          <v-btn @click="addMarble()">Add Marble</v-btn>
+          <v-btn @click="addMarble()">Flummi hinzufügen</v-btn>
         </v-col>
       </v-row>
       <v-row>

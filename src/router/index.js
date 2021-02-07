@@ -14,6 +14,10 @@ const routes = [
     component: () => import(/* webpackChunkName: "game" */ "../views/Profile")
   },
   {
+    path: "/multiplayer",
+    component: () => import(/* webpackChunkName: "game" */ "../views/Multiplayer")
+  },
+  {
     path: "/games/:slug",
     component: () => import(/* webpackChunkName: "game" */ "../views/Game.vue")
   },

@@ -1,15 +1,17 @@
 <template>
-  <v-container>
-    <level-navigation />
-    <div id="matterJsElement"></div>
-    <v-row>
+<div>
+    <v-container :fluid="true">
+        <level-navigation />
+        <div id="matterJsElement"></div>
+        <v-row>
       <v-col cols="20"
         >Farbenspiel: Berühre zwei Quadrate und färbe die transparenten Quadrate
         so in der Farbe in der ihre Umrandungen sind. Mit dem transparenten
         Quadrat entfärbst du sie wieder.</v-col
       >
     </v-row>
-  </v-container>
+    </v-container>
+</div>
 </template>
 
 <script>
@@ -28,10 +30,14 @@ import {
   Events
 } from "matter-js";
 import SweetAlert from "sweetalert2";
+import {
+    resizeMixin
+} from "@/mixins/resizeMixin";
 import { GAME_IDENTIFIER } from "@/store/modules/game";
 import LevelNavigation from "@/components/LevelNavigation";
 export default {
-  name: "Level1",
+  name: "Level2",
+  mixins: [resizeMixin],
   components: { LevelNavigation },
   data() {
     return {
@@ -60,6 +66,7 @@ export default {
       this.setupMouse();
       this.listenForCollisionEvents();
       this.test();
+      this.registerResizeEvent();
     },
     setupEngine() {
       this.engine = Engine.create();
@@ -70,8 +77,8 @@ export default {
         showCollisions: true,
         showVelocity: true,
         options: {
-          width: window.screen.availWidth - 20,
-          height: window.screen.availHeight - 310,
+          width: window.innerWidth,
+          height: window.innerHeight,    
           background: "dimgrey",
           wireframes: false
         }
@@ -167,7 +174,7 @@ export default {
           id: "301",
           render: {
             fillStyle: "transparent",
-            strokeStyle: "olive",
+            strokeStyle: "orange",
             lineWidth: 8
           }
         }),
@@ -179,7 +186,7 @@ export default {
           inertia: Infinity,
           render: {
             fillStyle: "transparent",
-            strokeStyle: "darkred",
+            strokeStyle: "purple",
             lineWidth: 8
           }
         }),
@@ -192,70 +199,70 @@ export default {
           inertia: Infinity,
           render: {
             fillStyle: "transparent",
-            strokeStyle: "lightcoral",
+            strokeStyle: "green",
             lineWidth: 8
           }
         }),
-        // walls
-        Bodies.rectangle(220, 600, 1600, 50, {
-          collisionFilter: {
-            //group: group2
-          },
-          render: {
-            fillStyle: "azure"
-          },
-          isStatic: true
-        }),
-        Bodies.rectangle(-550, 100, 50, 1000, {
-          collisionFilter: {
-            //group: group2
-          },
-          render: {
-            fillStyle: "azure"
-          },
-          isStatic: true
-        }),
-        Bodies.rectangle(970, 100, 50, 1000, {
-          collisionFilter: {
-            //group: group2
-          },
-          render: {
-            fillStyle: "azure"
-          },
-          isStatic: true
-        }),
-        Bodies.rectangle(220, 0, 1600, 50, {
-          collisionFilter: {
-            //group: group2
-          },
-          render: {
-            fillStyle: "azure"
-          },
-          isStatic: true
-        })
-      ]);
-    },
-    test() {
+       // walls
+                Bodies.rectangle(220, 600, 1600, 50, {
+                    collisionFilter: {
+                        //group: group2
+                    },
+                    render: {
+                        fillStyle: "azure"
+                    },
+                    isStatic: true
+                }),
+                Bodies.rectangle(-550, 100, 50, 1000, {
+                    collisionFilter: {
+                        //group: group2
+                    },
+                    render: {
+                        fillStyle: "azure"
+                    },
+                    isStatic: true
+                }),
+                Bodies.rectangle(970, 100, 50, 1000, {
+                    collisionFilter: {
+                        //group: group2
+                    },
+                    render: {
+                        fillStyle: "azure"
+                    },
+                    isStatic: true
+                }),
+                Bodies.rectangle(220, -200, 1600, 50, {
+                    collisionFilter: {
+                        //group: group2
+                    },
+                    render: {
+                        fillStyle: "azure"
+                    },
+                    isStatic: true
+                })
+            ]);
+        },
+    async test() {
       Events.on(this.engine, "collisionStart", async event => {
         var pairs = event.pairs;
         let a = pairs[0].bodyA;
         let b = pairs[0].bodyB;
 
         if (
-          (a.id == "301" && a.render.fillStyle == "olive") ||
-          (b.id == "301" && b.render.fillStyle == "olive")
+          (a.id == "301" && a.render.fillStyle == "orange") ||
+          (b.id == "301" && b.render.fillStyle == "orange")
         ) {
           success = 1;
         }
         if (
-          (a.id == "302" && a.render.fillStyle == "darkred") ||
-          (b.id == "302" && b.render.fillStyle == "darkred")
+          (a.id == "302" && a.render.fillStyle == "purple") ||
+          (b.id == "302" && b.render.fillStyle == "purple")
         ) {
           success1 = 1;
         }
         if (
-          (a.id == "303" && a.render.fillStyle == "lightcoral") ||
-          (b.id == "303" && b.render.fillStyle == "lightcoral")
+          (a.id == "303" && a.render.fillStyle == "green") ||
+          (b.id == "303" && b.render.fillStyle == "green")
         ) {
           success2 = 1;
         }
@@ -268,11 +275,11 @@ export default {
             showCancelButton: true
           });
           await this.$store.dispatch("level/didAchieveLevel", {
-            number: 1,
+            number: 2,
             gameIdentifier: GAME_IDENTIFIER.COLORS
           });
           if (isConfirmed) {
-            await this.$router.push("/games/colors/levels/2");
+            await this.$router.push("/games/colors/levels/3");
           }
         }
       });
@@ -295,9 +302,15 @@ export default {
 
       // fit the render viewport to the scene
       Render.lookAt(this.render, {
-        min: { x: 0, y: 0 },
-        max: { x: 800, y: 600 }
-      });
+                min: {
+                    x: -550,
+                    y: 0
+                },
+                max: {
+                    x: 970,
+                    y: 400
+                }
+            });
     },
 
     listenForCollisionEvents() {
@@ -409,4 +422,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+@media (min-width: 1200px){
+    .container{
+        max-width: 80%;
+    }
+}
+</style>

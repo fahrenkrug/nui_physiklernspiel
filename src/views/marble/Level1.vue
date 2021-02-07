@@ -1,6 +1,6 @@
 <template>
   <div class="level">
-    <v-container>
+    <v-container :fluid="true">
       <level-navigation />
       <div id="matterJsElement"></div>
       <v-row>
@@ -35,6 +35,9 @@ import {
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
 import { GAME_IDENTIFIER } from "@/store/modules/game";
+import {
+    resizeMixin
+} from "@/mixins/resizeMixin";
 //import Keypress from "vue-keypress";
 //import func from "../../vue-temp/vue-editor-bridge";
 
@@ -46,6 +49,7 @@ const render = {
 
 export default {
   name: "Level1",
+  mixins: [resizeMixin],
   components: { LevelNavigation },
   data() {
     return {
@@ -85,6 +89,7 @@ export default {
       this.setupWorld();
       this.setupMouse();
       this.listenForCollisionEvents();
+      this.registerResizeEvent();
     },
     setupEngine() {
       this.engine = Engine.create();
@@ -95,8 +100,8 @@ export default {
         showCollisions: true,
         showVelocity: true,
         options: {
-          width: window.screen.availWidth - 20,
-          height: window.screen.availHeight - 310,
+          width: window.innerWidth,
+          height: window.innerHeight,
           wireframes: false
         }
       });
