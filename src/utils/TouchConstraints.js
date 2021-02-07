@@ -1,13 +1,14 @@
 import {
-  Composite,
+  // Composite,
   Detector,
-  Constraint,
+  // Constraint,
   Vertices,
   Sleeping,
-  Mouse,
-  Events,
-  Common,
+  // Mouse,
+  // Events,
+  // Common,
   Bounds
+  // World
 } from "matter-js";
 
 /* const canCollide = (body, mouse, mouseConstraint) =>
@@ -19,50 +20,83 @@ import {
 
 export class TouchConstraint {
   static create = function(engine, options) {
-    console.log("create");
-    let mouse =
-      (engine ? engine.mouse : null) || (options ? options.mouse : null);
+    let { touches } = options;
 
-    if (!mouse) {
-      console.log("no mouse");
-      if (engine && engine.render && engine.render.canvas) {
-        mouse = Mouse.create(engine.render.canvas);
-      } else if (options && options.element) {
-        mouse = Mouse.create(options.element);
-      } else {
-        mouse = Mouse.create();
-        Common.warn(
-          "TouchConstraint.create: options.mouse was undefined, options.element was undefined, may not function as expected"
-        );
-      }
+    if (!touches) {
+      throw new Error("Please Provide touches property in options.");
     }
 
-    let constraint = Constraint.create({
-      label: "Mouse Constraint",
-      pointA: mouse.position,
-      pointB: { x: 0, y: 0 },
-      length: 0.01,
-      stiffness: 0.1,
-      angularStiffness: 1,
-      render: {
-        strokeStyle: "#90EE90",
-        lineWidth: 3
+    touches.observers.push({
+      touchStart: (event, touches) => {
+        options.onTouchesStart(touches);
+        /* for (let index = 0; index < 5; index++) {
+          const position = touches.positions[index];
+          let constraint = Constraint.create({
+            label: "Touch Constraint",
+            pointA: position,
+            pointB: { x: 0, y: 0 },
+            length: 0.01,
+            stiffness: 0.1,
+            angularStiffness: 1,
+            render: {
+              strokeStyle: "#90EE90",
+              lineWidth: 3
+            },
+            id: touches.constraints.length + 1
+          });
+
+          let defaults = {
+            type: "touchConstraint",
+            touches,
+            element: null,
+            body: null,
+            constraint,
+            collisionFilter: {
+              category: 0x0001,
+              mask: 0xffffffff,
+              group: 0
+            }
+          };
+          let touchConstraint = Common.extend(defaults, options);
+          Events.on(engine, "beforeUpdate", function() {
+            let allBodies = Composite.allBodies(engine.world);
+            TouchConstraint.update(touchConstraint, allBodies, touches);
+            // TouchConstraint._triggerEvents(mouseConstraint);
+          });
+          touches.constraints.push(touchConstraint);
+          World.add(engine.world, touchConstraint);
+        } */
+      },
+      touchMove: (event, touches) => {
+        // let allBodies = Composite.allBodies(engine.world);
+        // for (let index = 0; index < touches.activeTouches; index++) {
+        /* const position = touches.positions[index];
+          const body = TouchConstraint.findHittedBody(
+            allBodies,
+            position,
+            options
+          ); */
+        options.onTouchesMove(touches);
+        // }
+        // console.log("move in constraints");
+        // console.log(event.changedTouches);
+        // console.log("MOOVE");
+        // console.log(touches);
+      },
+      touchEnd: (event, touches) => {
+        options.onTouchesEnd(touches);
+        console.log("END");
+        console.log(touches);
+        // console.log(event.changedTouches);
+        // console.log("start in constraints");
+        // console.log(event.name);
       }
     });
 
-    let defaults = {
-      type: "mouseConstraint",
-      mouse: mouse,
-      element: null,
-      body: null,
-      constraint: constraint,
-      collisionFilter: {
-        category: 0x0001,
-        mask: 0xffffffff,
-        group: 0
-      }
-    };
+    return touches;
 
+    /*
+    touches.touchList.forEach(touch => {});
     // let occupiedBodies = new Set();
 
     let mouseConstraint = Common.extend(defaults, options);
@@ -73,14 +107,40 @@ export class TouchConstraint {
       TouchConstraint._triggerEvents(mouseConstraint);
     });
 
-    return mouseConstraint;
+    return mouseConstraint; */
   };
 
-  static update = function(mouseConstraint, bodies) {
-    let { mouse, constraint, body } = mouseConstraint;
+  static findHittedBody(bodies, position) {
+    return (
+      bodies
+        // .filter(body =>
+        //   Detector.canCollide(body.collisionFilter, options.collisionFilter)
+        // )
+        .find(body => {
+          if (!Bounds.contains(body.bounds, position)) {
+            return false;
+          }
+          console.log("FOUND BODY");
+          console.log(body);
+          const hittedBodyPart = body.parts.find(part =>
+            Vertices.contains(part.vertices, position)
+          );
+          if (!hittedBodyPart) {
+            return false;
+          }
+          console.log("FOUND PART");
+          return true;
+        })
+    );
+  }
 
-    if (mouse.button !== 0) {
-      constraint.bodyB = mouseConstraint.body = null;
+  static update = function(touchConstraint, bodies, position) {
+    // console.log(touchConstraint);
+    let { constraint } = touchConstraint;
+    // console.log("constraint update right here mister");
+
+    /*if (mouse.button !== 0) {
+      constraint.bodyB = touchConstraint.body = null;
       constraint.pointB = null;
 
       if (!body) {
@@ -91,44 +151,55 @@ export class TouchConstraint {
         body
       });
       return;
-    }
+    }*/
     if (constraint.bodyB) {
       Sleeping.set(constraint.bodyB, false);
-      constraint.pointA = mouse.position;
+      constraint.pointA = position;
       return;
     }
-    bodies.forEach(body => {
-      if (
-        !Bounds.contains(body.bounds, mouse.position) ||
-        !Detector.canCollide(
+    bodies
+      .filter(body =>
+        Detector.canCollide(
           body.collisionFilter,
-          mouseConstraint.collisionFilter
+          touchConstraint.collisionFilter
         )
-      ) {
-        return;
-      }
-      body.parts.forEach(part => {
-        if (!Vertices.contains(part.vertices, mouse.position)) {
+      )
+      .forEach(body => {
+        // console.log(body.bounds);
+        // console.log(position);
+        // console.log(
+        //   `xes: pos ${position.x} min: ${body.bounds.min.x} max: ${body.bounds.max.x}`
+        // );
+        // console.log(
+        //   `Yes: pos ${position.y} min: ${body.bounds.min.y} max: ${body.bounds.max.y}`
+        // );
+        if (!Bounds.contains(body.bounds, position)) {
           return;
         }
-        constraint.pointA = mouse.position;
-        constraint.bodyB = mouseConstraint.body = body;
-        constraint.pointB = {
-          x: mouse.position.x - body.position.x,
-          y: mouse.position.y - body.position.y
-        };
-        constraint.angleB = body.angle;
+        console.log("FOUND BODY");
+        console.log(body);
+        body.parts.forEach(part => {
+          if (!Vertices.contains(part.vertices, position)) {
+            return;
+          }
+          constraint.pointA = position;
+          constraint.bodyB = touchConstraint.body = body;
+          constraint.pointB = {
+            x: position.x - body.position.x,
+            y: position.y - body.position.y
+          };
+          constraint.angleB = body.angle;
 
-        Sleeping.set(body, false);
-        Events.trigger(mouseConstraint, "startdrag", {
-          mouse,
-          body
+          Sleeping.set(body, false);
+          // Events.trigger(touchConstraint, "startdrag", {
+          //   mouse,
+          //   body
+          // });
         });
       });
-    });
   };
 
-  static _triggerEvents = function(mouseConstraint) {
+  /*static _triggerEvents = function(mouseConstraint) {
     let mouse = mouseConstraint.mouse,
       mouseEvents = mouse.sourceEvents;
 
@@ -143,5 +214,5 @@ export class TouchConstraint {
 
     // reset the mouse state ready for the next step
     Mouse.clearSourceEvents(mouse);
-  };
+  }; */
 }

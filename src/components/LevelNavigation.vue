@@ -36,8 +36,10 @@ export default {
   name: "LevelNavigation",
   computed: {
     gameIdentifier() {
-      const regex = /(?<=games\/)\w+/;
-      return this.$route.path.match(regex)[0];
+      if (this.$route.path.split("games/").length < 2) {
+        return null;
+      }
+      return this.$route.path.split("games/")[1].split("/")[0];
     },
     levelsForGame() {
       return this.levels.filter(

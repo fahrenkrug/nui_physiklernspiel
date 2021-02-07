@@ -93,4 +93,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+#matterJsElement {
+  overflow: hidden;
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+</style>

@@ -93,6 +93,13 @@ const routes = [
     path: "/games/colors/levels/3",
     component: () =>
       import(/* webpackChunkName: "colorsLevel3" */ "../views/colors/Level3")
+  },
+  {
+    path: "/games/multitouch/levels/1",
+    component: () =>
+      import(
+        /* webpackChunkName: "multiTouchLevel" */ "../views/multitouch/Level1"
+      )
   }
 ];
 

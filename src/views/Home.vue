@@ -10,6 +10,9 @@
         <game-card :game="getGame(rowIndex, colIndex)" />
       </v-col>
     </v-row>
+    <v-row class="multi-touch-row">
+      <router-link to="/games/multitouch/levels/1">Multitouch</router-link>
+    </v-row>
   </v-container>
 </template>
 

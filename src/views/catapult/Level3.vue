@@ -14,7 +14,7 @@
 <script>
 import { Constraint, World, Bodies, Body, Vector } from "matter-js";
 import SweetAlert from "sweetalert2";
-import LevelNavigation from "@/components/LevelNavigation";
+// import LevelNavigation from "@/components/LevelNavigation";
 import { GAME_IDENTIFIER } from "@/store/modules/game";
 import { catapultLevelMixin } from "@/mixins/catapultLevelMixin";
 import { resizeMixin } from "@/mixins/resizeMixin";
@@ -22,7 +22,12 @@ import { resizeMixin } from "@/mixins/resizeMixin";
 export default {
   name: "Level3",
   mixins: [catapultLevelMixin, resizeMixin],
-  components: { LevelNavigation },
+  components: {
+    LevelNavigation: () =>
+      import(
+        /* webpackChunkName: "levelNavigation" */ "@/components/LevelNavigation"
+      )
+  },
   methods: {
     setupWorld() {
       const group = Body.nextGroup(true);
@@ -92,4 +97,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+#matterJsElement {
+  overflow: hidden;
+  canvas {
+    width: 100%;
+    height: 100%;
+  }
+}
+</style>
