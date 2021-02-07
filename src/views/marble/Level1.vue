@@ -399,4 +399,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+@media (min-width: 1200px) {
+    .container {
+        max-width: 80%;
+    }
+}
+</style>

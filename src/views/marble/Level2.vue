@@ -37,6 +37,9 @@ import {
 import SweetAlert from "sweetalert2";
 import LevelNavigation from "@/components/LevelNavigation";
 import { GAME_IDENTIFIER } from "@/store/modules/game";
+import {
+    resizeMixin
+} from "@/mixins/resizeMixin";
 //import Keypress from "vue-keypress";
 //import func from "../../vue-temp/vue-editor-bridge";
 
@@ -48,6 +51,7 @@ const render = {
 
 export default {
   name: "Level2",
+  mixins: [resizeMixin],
   components: { LevelNavigation },
   data() {
     return {
@@ -87,6 +91,7 @@ export default {
       this.setupWorld();
       this.setupMouse();
       this.listenForCollisionEvents();
+      this.registerResizeEvent();
     },
     setupEngine() {
       this.engine = Engine.create();

@@ -231,7 +231,7 @@ export default {
         async onGoalCollision() {
             await this.$store.dispatch("level/didAchieveLevel", {
                 number: 1,
-                gameIdentifier: GAME_IDENTIFIER.CATAPULT,
+                gameIdentifier: GAME_IDENTIFIER.SLINGSHOT,
             });
             const {
                 isConfirmed
