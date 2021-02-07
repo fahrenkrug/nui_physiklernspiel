@@ -275,7 +275,7 @@ export default {
             showCancelButton: true
           });
           await this.$store.dispatch("level/didAchieveLevel", {
-            number: 2,
+            number: 1,
             gameIdentifier: GAME_IDENTIFIER.COLORS
           });
           if (isConfirmed) {
