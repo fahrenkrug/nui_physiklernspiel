@@ -89,8 +89,8 @@ export default {
                     y: 1
                 },
                 options: {
-                    width: window.screen.availWidth - 20,
-                    height: window.screen.availHeight - 310,
+                    width: window.innerWidth,
+                    height: window.innerHeight * 0.8,
                     wireframes: false
                 }
             });
@@ -253,7 +253,7 @@ export default {
         async onGoalCollision() {
             await this.$store.dispatch("level/didAchieveLevel", {
                 number: 2,
-                gameIdentifier: GAME_IDENTIFIER.CATAPULT
+                gameIdentifier: GAME_IDENTIFIER.SLINGSHOT
             });
             const {
                 isConfirmed

@@ -90,8 +90,8 @@ export default {
                     y: 1
                 },
                 options: {
-                    width: window.screen.availWidth - 20,
-                    height: window.screen.availHeight - 310,
+                    width: window.innerWidth,
+                    height: window.innerHeight * 0.8,
                     wireframes: false
                 }
             });
@@ -193,7 +193,7 @@ export default {
                         id: 1,
                     });
                     World.add(this.world, ball);
-                    sling.bodyB = ball;     
+                    sling.bodyB = ball;
                     this.slingShot = sling;
                     firing = false;
                 }
@@ -235,7 +235,7 @@ export default {
                     await this.waitIfCollisionStays();
                     this.hits++;
                     if (this.hits == 3) {
-                    await this.onGoalCollision();
+                        await this.onGoalCollision();
                     }
                 } catch (e) {
                     console.log(e);
@@ -279,29 +279,27 @@ export default {
         async onGoalCollision() {
             await this.$store.dispatch("level/didAchieveLevel", {
                 number: 3,
-                gameIdentifier: GAME_IDENTIFIER.CATAPULT
+                gameIdentifier: GAME_IDENTIFIER.SLINGSHOT
             });
             const {
                 isConfirmed
             } = await SweetAlert.fire({
-                title: "Sehr gut!",
+                title: "Sehr gut! Alle Slingshot-Level durchgespielt.",
                 icon: "success",
-                confirmButtonText: "Zum nächsten Level",
-                cancelButtonText: "Abbrechen",
-                showCancelButton: true
+                confirmButtonText: "Zur Spieleübersicht",
+                showCancelButton: false
             });
             if (isConfirmed) {
-                await this.$router.push("/games/slingshot/levels/3");
+                await this.$router.push("/");
             }
         }
     }
 };
 </script>
 
-
 <style scoped>
-@media (min-width: 1200px){
-    .container{
+@media (min-width: 1200px) {
+    .container {
         max-width: 80%;
     }
 }
