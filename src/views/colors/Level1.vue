@@ -36,7 +36,7 @@ import {
 import { GAME_IDENTIFIER } from "@/store/modules/game";
 import LevelNavigation from "@/components/LevelNavigation";
 export default {
-  name: "Level2",
+  name: "Level1",
   mixins: [resizeMixin],
   components: { LevelNavigation },
   data() {
@@ -279,7 +279,7 @@ export default {
             gameIdentifier: GAME_IDENTIFIER.COLORS
           });
           if (isConfirmed) {
-            await this.$router.push("/games/colors/levels/3");
+            await this.$router.push("/games/colors/levels/2");
           }
         }
       });

@@ -31,7 +31,7 @@ import {
     resizeMixin
 } from "@/mixins/resizeMixin";
 export default {
-  name: "Level2",
+  name: "Level3",
   mixins: [resizeMixin],
   components: { LevelNavigation },
   data() {
