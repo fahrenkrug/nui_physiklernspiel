@@ -87,8 +87,8 @@ export default {
                     y: 1,
                 },
                 options: {
-                    width: window.innerWidth,
-                    height: window.innerHeight * 0.8,
+                    width: window.screen.availWidth - 20,
+                    height: window.screen.availHeight * 0.95,
                     wireframes: false,
                 },
             });
@@ -251,8 +251,8 @@ export default {
 </script>
 
 <style scoped>
-@media (min-width: 1200px){
-    .container{
+@media (min-width: 1200px) {
+    .container {
         max-width: 80%;
     }
 }

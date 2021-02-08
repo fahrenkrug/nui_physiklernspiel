@@ -1,6 +1,6 @@
 <template>
   <div class="level">
-    <v-container :fluid="true">
+    <v-container>
       <level-navigation />
       <div id="matterJsElement"></div>
       <v-row>
@@ -100,8 +100,8 @@ export default {
         showCollisions: true,
         showVelocity: true,
         options: {
-          width: window.innerWidth,
-          height: window.innerHeight,
+          width: window.screen.availWidth - 20,
+          height: window.screen.availHeight * 0.95,
           wireframes: false
         }
       });

@@ -89,7 +89,7 @@ export const catapultLevelMixin = {
         showVelocity: true,
         options: {
           width: window.screen.availWidth - 20,
-          height: window.screen.availHeight - 310,
+          height: window.screen.availHeight * 0.95,
           wireframes: false
         }
       });

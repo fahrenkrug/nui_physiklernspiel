@@ -4,12 +4,10 @@
         <level-navigation />
         <div id="matterJsElement"></div>
         <v-row>
-      <v-col cols="20"
-        >Farbenspiel: Berühre zwei Quadrate und färbe die transparenten Quadrate
-        so in der Farbe in der ihre Umrandungen sind. Mit dem transparenten
-        Quadrat entfärbst du sie wieder.</v-col
-      >
-    </v-row>
+            <v-col cols="20">Farbenspiel: Berühre zwei Quadrate und färbe die transparenten Quadrate
+                so in der Farbe in der ihre Umrandungen sind. Mit dem transparenten
+                Quadrat entfärbst du sie wieder.</v-col>
+        </v-row>
     </v-container>
 </div>
 </template>
@@ -96,8 +94,8 @@ export default {
                 showCollisions: true,
                 showVelocity: true,
                 options: {
-                    width: window.innerWidth,
-                    height: window.innerHeight,
+                    width: window.screen.availWidth - 20,
+                    height: window.screen.availHeight * 0.95,
                     background: "dimgrey",
                     wireframes: false
                 }
@@ -444,8 +442,8 @@ export default {
 </script>
 
 <style scoped>
-@media (min-width: 1200px){
-    .container{
+@media (min-width: 1200px) {
+    .container {
         max-width: 80%;
     }
 }

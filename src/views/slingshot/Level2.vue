@@ -89,8 +89,8 @@ export default {
                     y: 1
                 },
                 options: {
-                    width: window.innerWidth,
-                    height: window.innerHeight * 0.8,
+                    width: window.screen.availWidth - 20,
+                    height: window.screen.availHeight * 0.95,
                     wireframes: false
                 }
             });
@@ -171,7 +171,7 @@ export default {
                         id: 1,
                     });
                     World.add(this.world, ball);
-                    sling.bodyB = ball;     
+                    sling.bodyB = ball;
                     this.slingShot = sling;
                     firing = false;
                 }
@@ -213,7 +213,7 @@ export default {
                     await this.waitIfCollisionStays();
                     this.hits++;
                     if (this.hits == 2) {
-                    await this.onGoalCollision();
+                        await this.onGoalCollision();
                     }
                 } catch (e) {
                     console.log(e);
@@ -273,8 +273,8 @@ export default {
 </script>
 
 <style scoped>
-@media (min-width: 1200px){
-    .container{
+@media (min-width: 1200px) {
+    .container {
         max-width: 80%;
     }
 }

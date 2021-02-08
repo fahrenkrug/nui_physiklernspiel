@@ -77,8 +77,8 @@ export default {
         showCollisions: true,
         showVelocity: true,
         options: {
-          width: window.innerWidth,
-          height: window.innerHeight,    
+          width: window.screen.availWidth - 20,
+          height: window.screen.availHeight * 0.95,
           background: "dimgrey",
           wireframes: false
         }
