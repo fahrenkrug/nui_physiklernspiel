@@ -175,7 +175,7 @@ export default {
 
       this.bucket = Bodies.rectangle(
         window.screen.availWidth - 140 - 200,
-        window.screen.availHeight - 310 - 20,
+        window.screen.availHeight - 70,
         150,
         9,
         {
@@ -198,7 +198,7 @@ export default {
         ),
         Bodies.rectangle(
           (window.screen.availWidth - 20) / 2,
-          window.screen.availHeight - 310 - 8,
+          window.screen.availHeight - 60,
           window.screen.availWidth - 20,
           10,
           { isStatic: true, render }
@@ -207,14 +207,14 @@ export default {
           7,
           (window.screen.availHeight - 310) / 2,
           10,
-          window.screen.availHeight - 310,
+          window.screen.availHeight + 300,
           { isStatic: true, render }
         ),
         Bodies.rectangle(
           window.screen.availWidth - 20 - 7,
           (window.screen.availHeight - 310) / 2,
           10,
-          window.screen.availHeight - 310,
+          window.screen.availHeight + 300,
           { isStatic: true, render }
         ),
 
@@ -225,7 +225,7 @@ export default {
         //bottom bucket
         Bodies.rectangle(
           window.screen.availWidth - 20 - 50 - 200,
-          window.screen.availHeight - 310 - 50,
+          window.screen.availHeight - 100,
           10,
           70,
           {
@@ -237,7 +237,7 @@ export default {
         ),
         Bodies.rectangle(
           window.screen.availWidth - 20 - 200 - 200,
-          window.screen.availHeight - 310 - 50,
+          window.screen.availHeight  - 100,
           10,
           70,
           {

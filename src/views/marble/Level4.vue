@@ -258,7 +258,7 @@ export default {
 
       render.fillStyle = "rgb(49,51,53)";
       World.add(this.world, [
-        //walls
+      //walls
         Bodies.rectangle(
           (window.screen.availWidth - 20) / 2,
           8,
@@ -268,7 +268,7 @@ export default {
         ),
         Bodies.rectangle(
           (window.screen.availWidth - 20) / 2,
-          window.screen.availHeight - 310 - 8,
+          window.screen.availHeight - 60,
           window.screen.availWidth - 20,
           10,
           { isStatic: true, render }
@@ -277,14 +277,14 @@ export default {
           7,
           (window.screen.availHeight - 310) / 2,
           10,
-          window.screen.availHeight - 310,
+          window.screen.availHeight + 300,
           { isStatic: true, render }
         ),
         Bodies.rectangle(
           window.screen.availWidth - 20 - 7,
           (window.screen.availHeight - 310) / 2,
           10,
-          window.screen.availHeight - 310,
+          window.screen.availHeight + 300,
           { isStatic: true, render }
         ),
 
