@@ -35,6 +35,12 @@
         </template>
 
         <v-list color="primary" dark >
+           <v-list-item>
+            <v-btn to="/" text>
+              <span class="mr-2">Home</span>
+              <v-icon>mdi-home</v-icon>
+            </v-btn>
+          </v-list-item>
           <v-list-item>
             <v-btn to="/profile" text>
               <span class="mr-2">Account</span>
